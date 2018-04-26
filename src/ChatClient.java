@@ -12,6 +12,7 @@ public class ChatClient extends ChatBase {
 		
 	private String userName;
 	private String userPassword;
+	private Socket socket;
 	
 	private String adress;
 	private int port;

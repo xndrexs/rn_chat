@@ -7,10 +7,7 @@ public class ChatBase {
 	
 	protected PrintWriter messageWriter;
 	protected BufferedReader messageReader;
-	
-	protected Socket socket;
-	protected MessageFormatter printer;
-	
+	protected MessageFormatter printer;	
 	protected UUID id;
 	
 	public ChatBase(SenderType type) {
