@@ -1,3 +1,4 @@
+package model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,10 +16,13 @@ public class ChatUser {
 	private PrintWriter messageWriter;
 	private BufferedReader messageReader;
 	
+	private boolean online;
+	
 	public ChatUser(UUID id, Socket socket, BufferedReader messageReader) {
 		this.id = id;
 		this.socket = socket;
 		this.messageReader = messageReader;
+		this.online = true;
 		
 		try {
 			messageWriter = new PrintWriter(socket.getOutputStream(), true);
@@ -35,6 +39,18 @@ public class ChatUser {
 	
 	public BufferedReader getMessageReader() {
 		return messageReader;
+	}
+	
+	public UUID getID() {
+		return id;
+	}
+	
+	public boolean isOnline() {
+		return online;
+	}
+	
+	public void goOffline() {
+		online = false;
 	}
 
 }

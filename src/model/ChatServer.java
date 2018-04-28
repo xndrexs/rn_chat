@@ -1,3 +1,4 @@
+package model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,15 +49,20 @@ public class ChatServer extends ChatBase {
 					try {
 						// Hier wartet der Server auf eine eingehende Verbindung
 						Socket clientSocket = server.accept();
+						
+						// Neuen Reader für den verbundenen Client schicken (zum Empfangen von Nachrichten)
 						BufferedReader clientMessageReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+						
+						// Der Client schickt als erste Nachricht seine ID
 						UUID clientId = UUID.fromString(clientMessageReader.readLine());
 						
+						// Neuen User aus den Daten erstellen
 						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader);
 
 						clients.put(clientId, chatUser);
-						printer.printMessage("Client connected: " + clientId.toString());
+						printer.printMessage("Client connected: " + clientId.toString() + " (from: " + clientSocket.getRemoteSocketAddress() + ")");
 
-						// Starte neuen Thread für diesen User
+						// Starte neuen Thread für diesen User (Zum Senden und Empfangen von Nachrichten)
 						waitForMessages(chatUser);
 						
 					} catch (IOException e) {
@@ -74,13 +80,18 @@ public class ChatServer extends ChatBase {
 		Thread messageReceiverThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (true) {
+				while (chatUser.isOnline()) {
 					try {
 						String jsonMessage = chatUser.getMessageReader().readLine();
 						ChatMessage chatMessage = deserializeMessage(jsonMessage);
 						if (chatMessage != null) {
-							printer.printMessage("Message received (" + chatMessage.getUUID() + ")" + ": "
-									+ chatMessage.getMessage());
+							if (!chatMessage.getMessage().equals("Bye")) {
+								printer.printMessage("Message received (" + chatUser.getID() + ")" + ": "
+										+ chatMessage.getMessage());
+							} else {
+								printer.printMessage("Client disconnected: " + chatUser.getID() + " ... Bye Bye!");
+								chatUser.goOffline();
+							}
 						}
 					} catch (IOException e1) {
 						e1.printStackTrace();
