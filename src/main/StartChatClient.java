@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.ChatMainWindow;
 
-public class ChatProgramm extends Application {
+public class StartChatClient extends Application {
 	
 	ChatController controller;
 	ChatMainWindow main;

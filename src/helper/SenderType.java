@@ -1,4 +1,4 @@
-package model;
+package helper;
 
 public enum SenderType {
 	

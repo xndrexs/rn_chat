@@ -1,4 +1,5 @@
 package model;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,19 +13,25 @@ import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import helper.PortFinder;
+import helper.SenderType;
+
 public class ChatServer extends ChatBase {
 
+	public final static int SERVER_PORT = PortFinder.findFreePort();
 	private int port;
 	private ServerSocket server;
 
 	private Map<UUID, ChatUser> clients;
 
-	public ChatServer(int port) {
+	public ChatServer() {
 		super(SenderType.Server);
 		clients = new HashMap<UUID, ChatUser>();
-		printer.printMessage("Starting Server ... ");
+		this.port = SERVER_PORT;
+	}
 
-		this.port = port;
+	public void start() {
+		printer.printMessage("Starting Server ... ");
 
 		try {
 
@@ -39,8 +46,11 @@ public class ChatServer extends ChatBase {
 
 	}
 
-	// Startet einen neuen Thread, in welchem auf eigehende Verbindungen gewartet
-	// wird
+	/**
+	 * Startet einen neuen Thread, in welchem auf eigehende Verbindungen gewartet
+	 * wird
+	 */
+
 	private void waitForConnections() {
 		Thread waitForConnectionsThread = new Thread(new Runnable() {
 			@Override
@@ -49,22 +59,26 @@ public class ChatServer extends ChatBase {
 					try {
 						// Hier wartet der Server auf eine eingehende Verbindung
 						Socket clientSocket = server.accept();
-						
-						// Neuen Reader für den verbundenen Client schicken (zum Empfangen von Nachrichten)
-						BufferedReader clientMessageReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-						
+
+						// Neuen Reader für den verbundenen Client schicken (zum Empfangen von
+						// Nachrichten)
+						BufferedReader clientMessageReader = new BufferedReader(
+								new InputStreamReader(clientSocket.getInputStream()));
+
 						// Der Client schickt als erste Nachricht seine ID
 						UUID clientId = UUID.fromString(clientMessageReader.readLine());
-						
+
 						// Neuen User aus den Daten erstellen
 						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader);
 
 						clients.put(clientId, chatUser);
-						printer.printMessage("Client connected: " + clientId.toString() + " (from: " + clientSocket.getRemoteSocketAddress() + ")");
+						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
+								+ clientSocket.getRemoteSocketAddress() + ")");
 
-						// Starte neuen Thread für diesen User (Zum Senden und Empfangen von Nachrichten)
+						// Starte neuen Thread für diesen User (Zum Senden und Empfangen von
+						// Nachrichten)
 						waitForMessages(chatUser);
-						
+
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -75,7 +89,10 @@ public class ChatServer extends ChatBase {
 		printer.printMessage("Waiting for Connections ...");
 	}
 
-	// Nimmt Nachrichten entgegen in einem eigenen Thread
+	/**
+	 * Nimmt Nachrichten entgegen in einem eigenen Thread
+	 * @param chatUser
+	 */
 	private void waitForMessages(ChatUser chatUser) {
 		Thread messageReceiverThread = new Thread(new Runnable() {
 			@Override

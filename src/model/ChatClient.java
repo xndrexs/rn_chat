@@ -13,6 +13,9 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 import org.json.*;
 
+import helper.PortFinder;
+import helper.SenderType;
+
 public class ChatClient extends ChatBase {
 		
 	private String userName;
@@ -20,14 +23,16 @@ public class ChatClient extends ChatBase {
 	private Socket socket;	
 	private Scanner read;
 	private String adress;
-	private int port;
+	private int serverPort;
+	private int clientPort;
 
-	public ChatClient(String adress, int port) {
+	public ChatClient(String adress, int serverPort) {
 		super(SenderType.Client);
 		
 		read = new Scanner(System.in);
+		clientPort = PortFinder.findFreePort();
 
-		this.port = port;
+		this.serverPort = serverPort;
 		this.adress = adress;
 		
 		printer.printMessage("Starting Client ... ");
@@ -56,8 +61,8 @@ public class ChatClient extends ChatBase {
 
 	private void connectToServer() {
 		try {
-			socket = new Socket (adress, port);
-			printer.printMessage("Connected to: " + adress + "/" + port);
+			socket = new Socket (adress, serverPort);
+			printer.printMessage("Connected to: " + adress + "/" + serverPort);
 			
 			messageWriter = new PrintWriter(socket.getOutputStream(), true);
 			messageReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -110,7 +115,7 @@ public class ChatClient extends ChatBase {
 					
 					DatagramSocket clientSocket = null;
 					try {
-						clientSocket = new DatagramSocket(7777);
+						clientSocket = new DatagramSocket(clientPort);
 					} catch (SocketException e) {
 						e.printStackTrace();
 					}

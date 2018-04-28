@@ -4,6 +4,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.UUID;
 
+import helper.MessageFormatter;
+import helper.SenderType;
+
 public class ChatBase {
 	
 	protected PrintWriter messageWriter;
