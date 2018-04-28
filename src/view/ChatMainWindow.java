@@ -1,17 +1,23 @@
 package view;
-import javafx.application.Application;
-import javafx.scene.Scene;
+
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
-public class ChatMainWindow extends Application {
+public class ChatMainWindow extends BorderPane{
 
-	@Override
-	public void start(Stage stage) throws Exception {
-		ChatBorderPane pane = new ChatBorderPane();
-		Scene scene = new Scene(pane, 800, 800);
-		stage.setTitle("Chat");
-		stage.setScene(scene);
-		stage.show();		
+	ChatInputPane chatInput;
+	ChatMessageWindow chatMessageWindow;
+	
+	public ChatMainWindow() {
+		
+		chatInput = new ChatInputPane();
+		this.setBottom(chatInput);
+		chatMessageWindow = new ChatMessageWindow();
+		this.setCenter(chatMessageWindow);
+		
 	}
+	
+	public ChatInputPane getChatInputPane() {
+		return chatInput;
+	}
+	
 }

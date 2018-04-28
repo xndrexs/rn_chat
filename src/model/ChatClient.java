@@ -77,7 +77,7 @@ public class ChatClient extends ChatBase {
 	 * Sendet eine Nachricht an den verbundenen Socket
 	 * @param message
 	 */
-	private void sendMessage(String message) {
+	public void sendMessage(String message) {
 		
 		String json = serializeMessage(message);
 		
