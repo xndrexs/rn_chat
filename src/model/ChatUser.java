@@ -15,14 +15,16 @@ public class ChatUser {
 	private Socket socket;
 	private PrintWriter messageWriter;
 	private BufferedReader messageReader;
+	private int port;
 	
 	private boolean online;
 	
-	public ChatUser(UUID id, Socket socket, BufferedReader messageReader) {
+	public ChatUser(UUID id, Socket socket, BufferedReader messageReader, int port) {
 		this.id = id;
 		this.socket = socket;
 		this.messageReader = messageReader;
 		this.online = true;
+		this.port = port;
 		
 		try {
 			messageWriter = new PrintWriter(socket.getOutputStream(), true);

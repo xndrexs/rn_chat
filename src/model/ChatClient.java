@@ -8,11 +8,14 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 import org.json.*;
 
+import controller.ChatController;
+import helper.MessageHandler;
 import helper.PortFinder;
 import helper.SenderType;
 
@@ -23,6 +26,8 @@ public class ChatClient extends ChatBase {
 	private Socket socket;	
 	private Scanner read;
 	private String adress;
+	private ChatController controller;
+	private MessageHandler messageHandler;
 	private int serverPort;
 	private int clientPort;
 
@@ -31,6 +36,7 @@ public class ChatClient extends ChatBase {
 		
 		read = new Scanner(System.in);
 		clientPort = PortFinder.findFreePort();
+		messageHandler = new MessageHandler(id, clientPort);
 
 		this.serverPort = serverPort;
 		this.adress = adress;
@@ -43,7 +49,7 @@ public class ChatClient extends ChatBase {
 		//startMessageThread();
 	}
 	
-	// Noch kein Thread...
+	// Noch kein Thread... Aktuell für TCP an Server
 	private void startMessageThread() {
 		while(true) {
 			printer.printMessage("Send message: ");
@@ -59,6 +65,9 @@ public class ChatClient extends ChatBase {
 		}
 	}
 
+	/**
+	 * Verbindet sich mit dem Server
+	 */
 	private void connectToServer() {
 		try {
 			socket = new Socket (adress, serverPort);
@@ -67,8 +76,8 @@ public class ChatClient extends ChatBase {
 			messageWriter = new PrintWriter(socket.getOutputStream(), true);
 			messageReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
-			// Schicke ID an Server
-			messageWriter.println(id.toString());
+			// Schicke ID und Port an Server
+			messageWriter.println(messageHandler.serializeMessage("Hello"));
 			
 		} catch (UnknownHostException e) {
 			System.out.println("Unknown Host ...");
@@ -84,23 +93,12 @@ public class ChatClient extends ChatBase {
 	 */
 	public void sendMessage(String message) {
 		
-		String json = serializeMessage(message);
+		String json = messageHandler.serializeMessage(message);
 		
 		// printer.printMessage("Message to send: " + json);
 	
 		messageWriter.println(json);
 		messageWriter.flush();
-	}
-	
-	private String serializeMessage(String message) {
-		JSONObject json = new JSONObject();
-		try {
-			json.put("id", id);
-			json.put("message", message);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return json.toString();
 	}
 	
 	/**
@@ -127,12 +125,14 @@ public class ChatClient extends ChatBase {
 						clientSocket.receive(receivePacket);
 					} catch (IOException e) {
 						e.printStackTrace();
-					}					
+					}		
 					int remotePort = clientSocket.getPort();
 					String remoteAddress = clientSocket.getLocalAddress().toString();
 					String message = new String(receivePacket.getData());
+					ChatMessage chatMessage = messageHandler.deserializeMessage(message);
 					
-					printer.printMessage("Message received (" + remoteAddress + ":" + remotePort + ": " + message);
+					printer.printMessage("Message received (" + remoteAddress + ":" + remotePort + ": " + chatMessage.getMessage());
+					controller.notifyMessage(chatMessage);
 					clientSocket.close();
 				}
 			}
@@ -141,26 +141,15 @@ public class ChatClient extends ChatBase {
 		printer.printMessage("Message Receiver started for UDP ... ");
 	}
 	
-	private void startUDPConnection(String ipAddress, int port) {
-		DatagramSocket udpSocket;
-		InetAddress remoteAddress;
-		
-
-		try {
-			remoteAddress = InetAddress.getByName(ipAddress);
-			udpSocket = new DatagramSocket();
-		} catch (SocketException e) {
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
-		byte[] sendData;
-		byte[] receiveData = new byte[1024];
-		
-		String message = read.nextLine();
-		sendData = message.getBytes();
-		
-		
+	public SocketAddress getLocalAddress() {
+		return socket.getLocalSocketAddress();
+	}
+	
+	public SocketAddress getServerAddress() {
+		return socket.getRemoteSocketAddress();
+	}
+	
+	public void setController(ChatController controller) {
+		this.controller = controller;
 	}
 }

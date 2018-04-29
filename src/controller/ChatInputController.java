@@ -24,6 +24,8 @@ public class ChatInputController {
 		this.client = client;
 		
 		setupButton();
+		
+		
 	}
 	
 	private void setupButton() {

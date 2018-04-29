@@ -1,13 +1,29 @@
 package view;
 
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
-public class ChatMessageWindow extends VBox {
+import javafx.scene.control.TabPane;
+import model.ChatMessage;
+
+public class ChatMessageWindow extends TabPane {
+	
+	Map<UUID, ChatMessageTab> tabs;
 	
 	public ChatMessageWindow() {
-		Label chatMessage = new Label("Text Message");
-		getChildren().add(chatMessage);
+		tabs = new HashMap<UUID, ChatMessageTab>();
+	}
+	
+	public void displayMessage(ChatMessage chatMessage) {
+		if (tabs.containsKey(chatMessage.getUUID())) {
+			ChatMessageTab tab = tabs.get(chatMessage.getUUID());
+			tab.displayMessage(chatMessage.getMessage());
+		} else {
+			ChatMessageTab tab = new ChatMessageTab(chatMessage.getUUID().toString());
+			tabs.put(chatMessage.getUUID(), tab);
+			getTabs().add(tab);
+		}
 	}
 
 }

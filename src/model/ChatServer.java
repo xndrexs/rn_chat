@@ -13,21 +13,23 @@ import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import helper.MessageHandler;
 import helper.PortFinder;
 import helper.SenderType;
 
 public class ChatServer extends ChatBase {
 
-	public final static int SERVER_PORT = PortFinder.findFreePort();
+	public final static int SERVER_PORT = 55555;
 	private int port;
 	private ServerSocket server;
-
 	private Map<UUID, ChatUser> clients;
+	private MessageHandler messageHandler;
 
 	public ChatServer() {
 		super(SenderType.Server);
 		clients = new HashMap<UUID, ChatUser>();
 		this.port = SERVER_PORT;
+		messageHandler = new MessageHandler(id, SERVER_PORT);
 	}
 
 	public void start() {
@@ -65,11 +67,13 @@ public class ChatServer extends ChatBase {
 						BufferedReader clientMessageReader = new BufferedReader(
 								new InputStreamReader(clientSocket.getInputStream()));
 
-						// Der Client schickt als erste Nachricht seine ID
-						UUID clientId = UUID.fromString(clientMessageReader.readLine());
+						// Der Client schickt als erste Nachricht seine ID und Port
+						ChatMessage chatMessage = messageHandler.deserializeMessage(clientMessageReader.readLine());
+						UUID clientId = chatMessage.getUUID();
+						int port = chatMessage.getPort();
 
 						// Neuen User aus den Daten erstellen
-						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader);
+						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port);
 
 						clients.put(clientId, chatUser);
 						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
@@ -100,7 +104,7 @@ public class ChatServer extends ChatBase {
 				while (chatUser.isOnline()) {
 					try {
 						String jsonMessage = chatUser.getMessageReader().readLine();
-						ChatMessage chatMessage = deserializeMessage(jsonMessage);
+						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
 						if (chatMessage != null) {
 							if (!chatMessage.getMessage().equals("Bye")) {
 								printer.printMessage("Message received (" + chatUser.getID() + ")" + ": "
@@ -119,30 +123,6 @@ public class ChatServer extends ChatBase {
 		});
 		messageReceiverThread.start();
 		printer.printMessage("Waiting for Messages ... ");
-	}
-
-	/**
-	 * Deserialisiert eine JSON-Nachricht in ID des Senders und der Nachricht
-	 * 
-	 * @param jsonMessage
-	 *            Übergabe des JSON als String
-	 * @return Gibt ein ChatMessage Objekt mit ID des Senders als UUID und der
-	 *         Nachricht als String zurück
-	 */
-	private ChatMessage deserializeMessage(String jsonMessage) {
-		JSONObject json = null;
-		UUID clientId = null;
-		String message = null;
-		ChatMessage chatMessage = new ChatMessage();
-		try {
-			json = new JSONObject(jsonMessage);
-			clientId = UUID.fromString(json.getString("id"));
-			message = json.getString("message");
-			chatMessage.fillMessage(clientId, message);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return chatMessage;
 	}
 
 }
