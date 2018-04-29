@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import model.ChatMessage;
+import model.ChatUser;
 
 public class MessageHandler {
 	
@@ -45,6 +46,19 @@ public class MessageHandler {
 			json.put("id", id);
 			json.put("port", port);
 			json.put("message", message);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	public static String serializeMessageForUpdateClient(ChatUser chatUser) {
+		
+		JSONObject json = new JSONObject();
+		try {
+			json.put("id", chatUser.getID());
+			json.put("port",chatUser.getPort());
+			json.put("message", "User connected");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

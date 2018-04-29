@@ -5,8 +5,13 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.UUID;
 
 public class UDPSender {
+	
+	private UUID id;
+	private int port;
+	private String address;
 
 	public UDPSender(String address, int port, String message) {
 		DatagramSocket clientSocket = null;
@@ -30,6 +35,10 @@ public class UDPSender {
 			e.printStackTrace();
 		}
 		clientSocket.close();
+	}
+	
+	public void sendMessage(String message) {
+		
 	}
 	
 }

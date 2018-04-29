@@ -29,7 +29,6 @@ public class ChatUser {
 		try {
 			messageWriter = new PrintWriter(socket.getOutputStream(), true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -53,6 +52,14 @@ public class ChatUser {
 	
 	public void goOffline() {
 		online = false;
+	}
+	
+	public void update(String jsonMessage) {
+		messageWriter.println(jsonMessage);
+	}
+	
+	public int getPort() {
+		return port;
 	}
 
 }

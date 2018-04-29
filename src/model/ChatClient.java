@@ -46,6 +46,7 @@ public class ChatClient extends ChatBase {
 		
 		connectToServer();
 		startMessageReceiveThread();
+		startMessageReceiveThreadForTCP();
 		//startMessageThread();
 	}
 	
@@ -99,6 +100,29 @@ public class ChatClient extends ChatBase {
 	
 		messageWriter.println(json);
 		messageWriter.flush();
+	}
+	
+	private void startMessageReceiveThreadForTCP() {
+		Thread messageReceiveThreadForUDP = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while(true) {
+					String jsonMessage;
+					try {
+						jsonMessage = messageReader.readLine();
+						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
+						printer.printMessage("User connected: " + chatMessage.getUUID());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			}
+			
+		});
+		messageReceiveThreadForUDP.start();
 	}
 	
 	/**

@@ -7,7 +7,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -32,6 +34,9 @@ public class ChatServer extends ChatBase {
 		messageHandler = new MessageHandler(id, SERVER_PORT);
 	}
 
+	/**
+	 * Startet den Server und wartet auf eingehende Verbindungen
+	 */
 	public void start() {
 		printer.printMessage("Starting Server ... ");
 
@@ -52,7 +57,6 @@ public class ChatServer extends ChatBase {
 	 * Startet einen neuen Thread, in welchem auf eigehende Verbindungen gewartet
 	 * wird
 	 */
-
 	private void waitForConnections() {
 		Thread waitForConnectionsThread = new Thread(new Runnable() {
 			@Override
@@ -76,6 +80,8 @@ public class ChatServer extends ChatBase {
 						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port);
 
 						clients.put(clientId, chatUser);
+						updateClients(chatUser);
+						
 						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
 								+ clientSocket.getRemoteSocketAddress() + ")");
 
@@ -123,6 +129,15 @@ public class ChatServer extends ChatBase {
 		});
 		messageReceiverThread.start();
 		printer.printMessage("Waiting for Messages ... ");
+	}
+	
+	private void updateClients(ChatUser chatUser) {
+				
+		for(ChatUser currentUser : clients.values()) {
+			if (!currentUser.getID().equals(chatUser.getID())) {
+				currentUser.update(MessageHandler.serializeMessageForUpdateClient(chatUser));
+			}
+		}
 	}
 
 }

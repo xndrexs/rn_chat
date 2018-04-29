@@ -16,12 +16,13 @@ public class ChatMessageWindow extends TabPane {
 	}
 	
 	public void displayMessage(ChatMessage chatMessage) {
-		if (tabs.containsKey(chatMessage.getUUID())) {
-			ChatMessageTab tab = tabs.get(chatMessage.getUUID());
+		UUID id = chatMessage.getUUID();
+		if (tabs.containsKey(id)) {
+			ChatMessageTab tab = tabs.get(id);
 			tab.displayMessage(chatMessage.getMessage());
 		} else {
-			ChatMessageTab tab = new ChatMessageTab(chatMessage.getUUID().toString());
-			tabs.put(chatMessage.getUUID(), tab);
+			ChatMessageTab tab = new ChatMessageTab(id.toString());
+			tabs.put(id, tab);
 			getTabs().add(tab);
 		}
 	}
