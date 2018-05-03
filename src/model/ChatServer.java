@@ -3,20 +3,10 @@ package model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import helper.MessageHandler;
-import helper.PortFinder;
 import helper.SenderType;
 
 public class ChatServer extends ChatBase {
@@ -24,14 +14,12 @@ public class ChatServer extends ChatBase {
 	public final static int SERVER_PORT = 55555;
 	private int port;
 	private ServerSocket server;
-	private Map<UUID, ChatUser> clients;
 	private MessageHandler messageHandler;
 
 	public ChatServer() {
 		super(SenderType.Server);
-		clients = new HashMap<UUID, ChatUser>();
 		this.port = SERVER_PORT;
-		messageHandler = new MessageHandler(id, SERVER_PORT);
+		this.messageHandler = new MessageHandler(id, port);
 	}
 
 	/**
@@ -66,7 +54,7 @@ public class ChatServer extends ChatBase {
 						// Hier wartet der Server auf eine eingehende Verbindung
 						Socket clientSocket = server.accept();
 
-						// Neuen Reader für den verbundenen Client schicken (zum Empfangen von
+						// Neuen Reader fï¿½r den verbundenen Client schicken (zum Empfangen von
 						// Nachrichten)
 						BufferedReader clientMessageReader = new BufferedReader(
 								new InputStreamReader(clientSocket.getInputStream()));
@@ -85,7 +73,7 @@ public class ChatServer extends ChatBase {
 						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
 								+ clientSocket.getRemoteSocketAddress() + ")");
 
-						// Starte neuen Thread für diesen User (Zum Senden und Empfangen von
+						// Starte neuen Thread fï¿½r diesen User (Zum Senden und Empfangen von
 						// Nachrichten)
 						waitForMessages(chatUser);
 
@@ -124,11 +112,11 @@ public class ChatServer extends ChatBase {
 						e1.printStackTrace();
 					}
 				}
-
+				// chatUser.disconnect();
 			}
 		});
 		messageReceiverThread.start();
-		printer.printMessage("Waiting for Messages ... ");
+		printer.printMessage("Waiting for Messages from " + chatUser.getID() + " ...");
 	}
 	
 	private void updateClients(ChatUser chatUser) {

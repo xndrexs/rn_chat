@@ -12,6 +12,8 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.UUID;
+
 import org.json.*;
 
 import controller.ChatController;
@@ -50,7 +52,7 @@ public class ChatClient extends ChatBase {
 		//startMessageThread();
 	}
 	
-	// Noch kein Thread... Aktuell für TCP an Server
+	// Noch kein Thread... Aktuell fï¿½r TCP an Server
 	private void startMessageThread() {
 		while(true) {
 			printer.printMessage("Send message: ");
@@ -93,15 +95,14 @@ public class ChatClient extends ChatBase {
 	 * @param message
 	 */
 	public void sendMessage(String message) {
-		
-		String json = messageHandler.serializeMessage(message);
-		
-		// printer.printMessage("Message to send: " + json);
-	
+		String json = messageHandler.serializeMessage(message);	
 		messageWriter.println(json);
 		messageWriter.flush();
 	}
 	
+	/**
+	 * Startet einen Thread (TCP) fÃ¼r Nachrichten vom Server (aktuell nur, wenn ein User online geht)
+	 */
 	private void startMessageReceiveThreadForTCP() {
 		Thread messageReceiveThreadForUDP = new Thread(new Runnable() {
 
@@ -112,21 +113,22 @@ public class ChatClient extends ChatBase {
 					try {
 						jsonMessage = messageReader.readLine();
 						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
-						printer.printMessage("User connected: " + chatMessage.getUUID());
+						UUID id = chatMessage.getUUID();
+						printer.printMessage("User connected: " + id);
+						ChatUser newUser = new ChatUser(id, chatMessage.getPort());
+						clients.put(id, newUser);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
 				}
 			}
-			
 		});
 		messageReceiveThreadForUDP.start();
 	}
 	
 	/**
-	 * Startet einen Thread für Nachrichten, welche über UDP an den Client geschickt werden
+	 * Startet einen Thread fï¿½r Nachrichten, welche ï¿½ber UDP an den Client geschickt werden
+	 * Muss noch umgebaut werden, weil fÃ¼r jede Nachricht ein Socket erstellt wird
 	 */
 	private void startMessageReceiveThread() {
 		

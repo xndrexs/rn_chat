@@ -31,7 +31,11 @@ public class ChatUser {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+	
+	public ChatUser(UUID id, int port) {
+		this.id = id;
+		this.port = port;
 	}
 	
 	public void sendMessage(String message) {
@@ -60,6 +64,15 @@ public class ChatUser {
 	
 	public int getPort() {
 		return port;
+	}
+	
+	public void disconnect() {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

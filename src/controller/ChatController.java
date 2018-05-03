@@ -11,6 +11,7 @@ public class ChatController {
 	ChatInputController input;
 	ChatOutputController output;
 	ChatClient client;
+	ChatUserController userController;
 	
 	
 	public ChatController(ChatMainWindow main) {
@@ -21,6 +22,7 @@ public class ChatController {
 		client.setController(this);
 		this.input = new ChatInputController(main.getChatInputPane(), client);
 		this.output = new ChatOutputController(main.getChatMessageWindow());
+		this.userController = new ChatUserController(main.getChatUserPane(), client.getClients());
 		
 		setupInfoPane();
 	}
