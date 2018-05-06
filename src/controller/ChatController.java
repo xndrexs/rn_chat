@@ -18,11 +18,16 @@ public class ChatController {
 		
 		int port = ChatServer.SERVER_PORT;
 		this.main = main;
+		
 		this.client = new ChatClient("localhost", port);
 		this.client.setController(this);
-		this.input = new ChatInputController(main.getChatInputPane(), client);
+		
 		this.output = new ChatOutputController(main.getChatMessageWindow());
+		this.input = new ChatInputController(main.getChatInputPane(), client);
+		this.input.setOutputController(output);
+		
 		this.userController = new ChatUserController(main.getChatUserPane(), client.getClients());
+		this.userController.setOutputController(output);
 		
 		setupInfoPane();
 	}

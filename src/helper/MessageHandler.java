@@ -65,4 +65,16 @@ public class MessageHandler {
 		return json.toString();
 	}
 	
+	public static String serializeMessageForUDP(UUID id, int port, String message) {
+		JSONObject json = new JSONObject();
+		try {
+			json.put("id", id);
+			json.put("port", port);
+			json.put("message", message);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
 }

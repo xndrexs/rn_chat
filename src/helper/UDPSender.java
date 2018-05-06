@@ -13,7 +13,12 @@ public class UDPSender {
 	private int port;
 	private String address;
 
-	public UDPSender(String address, int port, String message) {
+	public UDPSender(String address, int port) {
+		this.port = port;
+		this.address = address;
+	}
+	
+	public void sendMessage(String message) {
 		DatagramSocket clientSocket = null;
 		InetAddress ipAddress = null;
 		
@@ -35,10 +40,6 @@ public class UDPSender {
 			e.printStackTrace();
 		}
 		clientSocket.close();
-	}
-	
-	public void sendMessage(String message) {
-		
 	}
 	
 }

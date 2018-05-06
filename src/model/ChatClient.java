@@ -6,21 +6,18 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 import java.util.UUID;
-
-import org.json.*;
-
 import controller.ChatController;
 import helper.MessageHandler;
 import helper.MessageType;
 import helper.PortFinder;
 import helper.SenderType;
+import helper.UDPSender;
 
 public class ChatClient extends ChatBase {
 		
@@ -31,6 +28,7 @@ public class ChatClient extends ChatBase {
 	private String adress;
 	private ChatController controller;
 	private MessageHandler messageHandler;
+	private ChatUser activeUser;
 	private int serverPort;
 	private int clientPort;
 
@@ -92,13 +90,21 @@ public class ChatClient extends ChatBase {
 	}
 	
 	/**
-	 * Sendet eine Nachricht an den verbundenen Socket
+	 * Sendet eine Nachricht an den verbundenen Socket (TCP)
 	 * @param message
 	 */
 	public void sendMessage(String message) {
 		String json = messageHandler.serializeMessage(message);	
 		messageWriter.println(json);
 		messageWriter.flush();
+	}
+	
+	public void sendUDPMessage(ChatUser user, String message) {
+		if (user != null) {
+			UDPSender sender = new UDPSender("127.0.0.1", user.getPort());
+			sender.sendMessage(message);
+			printer.printMessage("SENT: " + message);
+		}
 	}
 	
 	/**
@@ -186,5 +192,9 @@ public class ChatClient extends ChatBase {
 	
 	public void setController(ChatController controller) {
 		this.controller = controller;
+	}
+	
+	public ChatUser getActiveChatUser() {
+		return activeUser;
 	}
 }

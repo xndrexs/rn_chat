@@ -1,11 +1,13 @@
 package controller;
 
+import helper.MessageHandler;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import model.ChatClient;
+import model.ChatUser;
 import view.ChatInputPane;
 
 public class ChatInputController {
@@ -15,6 +17,7 @@ public class ChatInputController {
 	private Button sendButton;
 	private String message;
 	private ChatClient client;
+	private ChatOutputController output;
 	
 	public ChatInputController(ChatInputPane input, ChatClient client) {
 		
@@ -37,7 +40,11 @@ public class ChatInputController {
 				message = textArea.getText();
 				if (message != null) {
 					textArea.clear();
-					client.sendMessage(message);
+					// client.sendMessage(message);
+					String id = output.getTabPane().getSelectionModel().getSelectedItem().getText();
+					ChatUser user = client.getClients().get(id);
+					String jsonMessage = MessageHandler.serializeMessageForUDP(user.getID(), user.getPort(), message);
+					client.sendUDPMessage(user, jsonMessage);
 				}
 			}
 		};
@@ -46,6 +53,10 @@ public class ChatInputController {
 	
 	public String getMessageInput() {
 		return message;
+	}
+
+	public void setOutputController(ChatOutputController output) {
+		this.output = output;
 	}
 	
 }

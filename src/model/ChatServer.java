@@ -106,6 +106,7 @@ public class ChatServer extends ChatBase {
 						}
 					} catch (IOException e1) {
 						chatUser.disconnect();
+						clients.remove(chatUser.getID().toString());
 						printer.printMessage("Client disconnected: " + chatUser.getID() + " ... Bye Bye!");
 						updateClients(chatUser, MessageType.Disconnect);
 					}
