@@ -52,13 +52,13 @@ public class MessageHandler {
 		return json.toString();
 	}
 	
-	public static String serializeMessageForUpdateClient(ChatUser chatUser) {
+	public static String serializeMessageForUpdateClient(ChatUser chatUser, MessageType type) {
 		
 		JSONObject json = new JSONObject();
 		try {
 			json.put("id", chatUser.getID());
 			json.put("port",chatUser.getPort());
-			json.put("message", "User connected");
+			json.put("message", type.getType());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

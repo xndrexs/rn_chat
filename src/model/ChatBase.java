@@ -2,7 +2,6 @@ package model;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import helper.MessageFormatter;
 import helper.SenderType;
@@ -21,7 +20,6 @@ public class ChatBase {
 		id = UUID.randomUUID();
 		printer = new MessageFormatter(id, type);
 		clients = FXCollections.observableMap(new HashMap<String, ChatUser>());
-		clients.put(UUID.randomUUID().toString(), null);
 	}
 	
 	public BufferedReader getMessageReader() {

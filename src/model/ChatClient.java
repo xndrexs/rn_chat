@@ -18,6 +18,7 @@ import org.json.*;
 
 import controller.ChatController;
 import helper.MessageHandler;
+import helper.MessageType;
 import helper.PortFinder;
 import helper.SenderType;
 
@@ -114,9 +115,17 @@ public class ChatClient extends ChatBase {
 						jsonMessage = messageReader.readLine();
 						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
 						UUID id = chatMessage.getUUID();
-						printer.printMessage("User connected: " + id);
-						ChatUser newUser = new ChatUser(id, chatMessage.getPort());
-						clients.put(id.toString(), newUser);
+						
+						if (chatMessage.getMessage().equals(MessageType.Connect.getType())) {
+							printer.printMessage("User connected: " + id);
+							ChatUser newUser = new ChatUser(id, chatMessage.getPort());
+							clients.put(id.toString(), newUser);
+						}
+						if (chatMessage.getMessage().equals(MessageType.Disconnect.getType())) {
+							printer.printMessage("User disconnected: " + id);
+							clients.remove(id.toString());
+						}
+
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

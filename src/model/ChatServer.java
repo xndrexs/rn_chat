@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.UUID;
 import helper.MessageHandler;
+import helper.MessageType;
 import helper.SenderType;
 
 public class ChatServer extends ChatBase {
@@ -69,7 +70,7 @@ public class ChatServer extends ChatBase {
 						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port);
 
 						clients.put(clientId.toString(), chatUser);
-						updateClients(chatUser);
+						updateClients(chatUser, MessageType.Connect);
 						
 						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
 								+ clientSocket.getRemoteSocketAddress() + ")");
@@ -104,9 +105,9 @@ public class ChatServer extends ChatBase {
 							printer.printMessage("Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
 						}
 					} catch (IOException e1) {
-						// e1.printStackTrace();
 						chatUser.disconnect();
 						printer.printMessage("Client disconnected: " + chatUser.getID() + " ... Bye Bye!");
+						updateClients(chatUser, MessageType.Disconnect);
 					}
 				}
 				
@@ -116,11 +117,12 @@ public class ChatServer extends ChatBase {
 		printer.printMessage("Waiting for Messages from " + chatUser.getID() + " ...");
 	}
 	
-	private void updateClients(ChatUser chatUser) {
+	private void updateClients(ChatUser chatUser, MessageType type) {
 				
 		for(ChatUser currentUser : clients.values()) {
-			if (currentUser != null && !currentUser.getID().equals(chatUser.getID())) {
-				currentUser.update(MessageHandler.serializeMessageForUpdateClient(chatUser));
+			if (!currentUser.getID().equals(chatUser.getID())) {
+				currentUser.update(MessageHandler.serializeMessageForUpdateClient(chatUser, type));
+				chatUser.update(MessageHandler.serializeMessageForUpdateClient(currentUser, type));
 			}
 		}
 	}
