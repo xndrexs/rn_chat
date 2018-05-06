@@ -1,21 +1,23 @@
 package controller;
 
-import java.util.Map;
-import java.util.UUID;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import helper.MyMapChanger;
+import javafx.collections.ObservableMap;
 import model.ChatUser;
 import view.ChatUserPane;
 
 public class ChatUserController {
 
-	ChatUserPane chatUserPane;
-	ObservableList<String> clients;
-	
-	public ChatUserController(ChatUserPane chatUserPane, Map<UUID, ChatUser> clients) {
+	private ChatUserPane chatUserPane;
+	private ObservableMap<String, ChatUser> clients;
+
+	public ChatUserController(ChatUserPane chatUserPane, ObservableMap<String, ChatUser> clients) {
 		this.chatUserPane = chatUserPane;
-		this.clients = FXCollections.observableArrayList("TEST1");
-		chatUserPane.getListView().setItems(this.clients);
+		this.clients = clients;
+		setupListenerForUserPane();
+	}
+	
+	private void setupListenerForUserPane() {
+		chatUserPane.getListView().getItems().addAll(clients.keySet());
+		clients.addListener(new MyMapChanger(chatUserPane.getListView()));
 	}
 }

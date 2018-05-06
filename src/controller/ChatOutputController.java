@@ -5,7 +5,7 @@ import view.ChatMessageWindow;
 
 public class ChatOutputController {
 	
-	ChatMessageWindow chatMessageWindow;
+	private ChatMessageWindow chatMessageWindow;
 
 	public ChatOutputController(ChatMessageWindow chatMessageWindow) {
 		this.chatMessageWindow = chatMessageWindow;

@@ -1,14 +1,13 @@
 package model;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import helper.MessageFormatter;
-import helper.MessageHandler;
 import helper.SenderType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
 public class ChatBase {
 	
@@ -16,12 +15,13 @@ public class ChatBase {
 	protected BufferedReader messageReader;
 	protected MessageFormatter printer;
 	protected UUID id;
-	protected Map<UUID, ChatUser> clients;
+	protected ObservableMap<String, ChatUser> clients;
 	
 	public ChatBase(SenderType type) {
 		id = UUID.randomUUID();
 		printer = new MessageFormatter(id, type);
-		clients = new HashMap<UUID, ChatUser>();
+		clients = FXCollections.observableMap(new HashMap<String, ChatUser>());
+		clients.put(UUID.randomUUID().toString(), null);
 	}
 	
 	public BufferedReader getMessageReader() {
@@ -32,7 +32,7 @@ public class ChatBase {
 		return id;
 	}
 	
-	public Map<UUID, ChatUser> getClients() {
+	public ObservableMap<String, ChatUser> getClients() {
 		return clients;
 	}
 

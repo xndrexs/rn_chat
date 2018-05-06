@@ -7,11 +7,11 @@ import view.ChatMainWindow;
 
 public class ChatController {
 	
-	ChatMainWindow main;
-	ChatInputController input;
-	ChatOutputController output;
-	ChatClient client;
-	ChatUserController userController;
+	private ChatMainWindow main;
+	private ChatInputController input;
+	private ChatOutputController output;
+	private ChatClient client;
+	private ChatUserController userController;
 	
 	
 	public ChatController(ChatMainWindow main) {
@@ -19,7 +19,7 @@ public class ChatController {
 		int port = ChatServer.SERVER_PORT;
 		this.main = main;
 		this.client = new ChatClient("localhost", port);
-		client.setController(this);
+		this.client.setController(this);
 		this.input = new ChatInputController(main.getChatInputPane(), client);
 		this.output = new ChatOutputController(main.getChatMessageWindow());
 		this.userController = new ChatUserController(main.getChatUserPane(), client.getClients());

@@ -9,6 +9,7 @@ public class ChatUserPane extends VBox {
 	
 	public ChatUserPane() {
 		list = new ListView<String>();
+		getChildren().add(list);
 	}
 	
 	public ListView<String> getListView(){

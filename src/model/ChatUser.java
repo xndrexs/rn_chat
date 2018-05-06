@@ -69,6 +69,7 @@ public class ChatUser {
 	public void disconnect() {
 		try {
 			socket.close();
+			online = false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

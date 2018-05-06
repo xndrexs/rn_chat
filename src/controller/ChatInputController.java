@@ -10,11 +10,11 @@ import view.ChatInputPane;
 
 public class ChatInputController {
 
-	ChatInputPane input;
-	TextArea textArea;
-	Button sendButton;
-	String message;
-	ChatClient client;
+	private ChatInputPane input;
+	private TextArea textArea;
+	private Button sendButton;
+	private String message;
+	private ChatClient client;
 	
 	public ChatInputController(ChatInputPane input, ChatClient client) {
 		

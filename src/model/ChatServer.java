@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.UUID;
 import helper.MessageHandler;
 import helper.SenderType;
@@ -67,7 +68,7 @@ public class ChatServer extends ChatBase {
 						// Neuen User aus den Daten erstellen
 						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port);
 
-						clients.put(clientId, chatUser);
+						clients.put(clientId.toString(), chatUser);
 						updateClients(chatUser);
 						
 						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
@@ -100,19 +101,15 @@ public class ChatServer extends ChatBase {
 						String jsonMessage = chatUser.getMessageReader().readLine();
 						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
 						if (chatMessage != null) {
-							if (!chatMessage.getMessage().equals("Bye")) {
-								printer.printMessage("Message received (" + chatUser.getID() + ")" + ": "
-										+ chatMessage.getMessage());
-							} else {
-								printer.printMessage("Client disconnected: " + chatUser.getID() + " ... Bye Bye!");
-								chatUser.goOffline();
-							}
+							printer.printMessage("Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
 						}
 					} catch (IOException e1) {
-						e1.printStackTrace();
+						// e1.printStackTrace();
+						chatUser.disconnect();
+						printer.printMessage("Client disconnected: " + chatUser.getID() + " ... Bye Bye!");
 					}
 				}
-				// chatUser.disconnect();
+				
 			}
 		});
 		messageReceiverThread.start();
@@ -122,7 +119,7 @@ public class ChatServer extends ChatBase {
 	private void updateClients(ChatUser chatUser) {
 				
 		for(ChatUser currentUser : clients.values()) {
-			if (!currentUser.getID().equals(chatUser.getID())) {
+			if (currentUser != null && !currentUser.getID().equals(chatUser.getID())) {
 				currentUser.update(MessageHandler.serializeMessageForUpdateClient(chatUser));
 			}
 		}

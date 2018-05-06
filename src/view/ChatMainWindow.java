@@ -13,12 +13,16 @@ public class ChatMainWindow extends BorderPane{
 		
 		chatInput = new ChatInputPane();
 		this.setBottom(chatInput);
+		
 		chatMessageWindow = new ChatMessageWindow();
 		this.setCenter(chatMessageWindow);
+		
 		chatInfo = new ChatInfoPane();
 		this.setTop(chatInfo);
+		
 		chatUserPane = new ChatUserPane();
 		this.setRight(chatUserPane);
+		
 	}
 	
 	public ChatInputPane getChatInputPane() {

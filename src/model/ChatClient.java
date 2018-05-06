@@ -116,7 +116,7 @@ public class ChatClient extends ChatBase {
 						UUID id = chatMessage.getUUID();
 						printer.printMessage("User connected: " + id);
 						ChatUser newUser = new ChatUser(id, chatMessage.getPort());
-						clients.put(id, newUser);
+						clients.put(id.toString(), newUser);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
