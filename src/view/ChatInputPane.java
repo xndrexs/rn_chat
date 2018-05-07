@@ -10,14 +10,10 @@ public class ChatInputPane extends HBox {
 	Button send;
 	
 	public ChatInputPane() {
-		
-		// Eingabe des Textes
-		input = new TextArea("Type your messages...");
+		input = new TextArea();
 		input.setPrefRowCount(3);
-				
-		// Abschicken der Nachricht
 		send = new Button("Send");
-		
+	
 		getChildren().addAll(input, send);
 	}
 	
@@ -28,5 +24,4 @@ public class ChatInputPane extends HBox {
 	public TextArea getTextArea() {
 		return input;
 	}
-	
 }

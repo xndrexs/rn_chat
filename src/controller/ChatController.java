@@ -8,11 +8,9 @@ import view.ChatMainWindow;
 public class ChatController {
 	
 	private ChatMainWindow main;
-	private ChatInputController input;
-	private ChatOutputController output;
+	private ChatMessageController messageController;
 	private ChatClient client;
 	private ChatUserController userController;
-	
 	
 	public ChatController(ChatMainWindow main) {
 		
@@ -22,12 +20,9 @@ public class ChatController {
 		this.client = new ChatClient("localhost", port);
 		this.client.setController(this);
 		
-		this.output = new ChatOutputController(main.getChatMessageWindow());
-		this.input = new ChatInputController(main.getChatInputPane(), client);
-		this.input.setOutputController(output);
-		
-		this.userController = new ChatUserController(main.getChatUserPane(), client.getClients());
-		this.userController.setOutputController(output);
+		this.messageController = new ChatMessageController(main.getChatMessageWindow(), client);		
+		this.userController = new ChatUserController(main.getChatUserPane(), client);
+		this.userController.setOutputController(messageController);
 		
 		setupInfoPane();
 	}
@@ -39,6 +34,6 @@ public class ChatController {
 	}
 	
 	public void notifyMessage(ChatMessage message) {
-		output.displayMessage(message);
+		messageController.handleMessage(message);
 	}
 }

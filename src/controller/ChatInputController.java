@@ -17,34 +17,30 @@ public class ChatInputController {
 	private Button sendButton;
 	private String message;
 	private ChatClient client;
-	private ChatOutputController output;
+	private ChatMessageController output;
+	private ChatUser user;
+	private MessageHandler messageHandler;
 	
-	public ChatInputController(ChatInputPane input, ChatClient client) {
-		
-		this.input = input;	
+	public ChatInputController(ChatInputPane input, ChatClient client, ChatUser user) {
+		this.input = input;
 		this.textArea = input.getTextArea();
 		this.sendButton = input.getSendButton();
 		this.client = client;
-		
+		this.messageHandler = new MessageHandler(client.getId(), user.getPort());
+		this.user = user;
 		setupButton();
-		
-		
 	}
 	
 	private void setupButton() {
 		EventType<MouseEvent> eventType = MouseEvent.MOUSE_CLICKED;
 		EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
-
 			@Override
 			public void handle(MouseEvent arg0) {
 				message = textArea.getText();
 				if (message != null) {
 					textArea.clear();
-					// client.sendMessage(message);
-					String id = output.getTabPane().getSelectionModel().getSelectedItem().getText();
-					ChatUser user = client.getClients().get(id);
-					String jsonMessage = MessageHandler.serializeMessageForUDP(user.getID(), user.getPort(), message);
-					client.sendUDPMessage(user, jsonMessage);
+					client.sendUDPMessage(user, messageHandler.serializeMessage(message));
+					System.out.println(messageHandler.serializeMessage(message));
 				}
 			}
 		};
@@ -55,8 +51,7 @@ public class ChatInputController {
 		return message;
 	}
 
-	public void setOutputController(ChatOutputController output) {
+	public void setOutputController(ChatMessageController output) {
 		this.output = output;
 	}
-	
 }

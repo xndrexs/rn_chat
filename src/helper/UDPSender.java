@@ -32,7 +32,6 @@ public class UDPSender {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, port);
 		try {
 			clientSocket.send(sendPacket);

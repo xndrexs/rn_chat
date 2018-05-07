@@ -4,15 +4,12 @@ import javafx.scene.layout.BorderPane;
 
 public class ChatMainWindow extends BorderPane{
 
-	ChatInputPane chatInput;
 	ChatMessageWindow chatMessageWindow;
 	ChatInfoPane chatInfo;
 	ChatUserPane chatUserPane;
+	ChatLog chatLog;
 	
 	public ChatMainWindow() {
-		
-		chatInput = new ChatInputPane();
-		this.setBottom(chatInput);
 		
 		chatMessageWindow = new ChatMessageWindow();
 		this.setCenter(chatMessageWindow);
@@ -23,22 +20,24 @@ public class ChatMainWindow extends BorderPane{
 		chatUserPane = new ChatUserPane();
 		this.setRight(chatUserPane);
 		
-	}
-	
-	public ChatInputPane getChatInputPane() {
-		return chatInput;
-	}
-	
-	public ChatInfoPane getChatInfoPane() {
-		return chatInfo;
+		chatLog = new ChatLog();
+		this.setLeft(chatLog);
+		
 	}
 	
 	public ChatMessageWindow getChatMessageWindow() {
 		return chatMessageWindow;
 	}
-	
+
 	public ChatUserPane getChatUserPane() {
 		return chatUserPane;
 	}
 	
+	public ChatInfoPane getChatInfoPane() {
+		return chatInfo;
+	}	
+	
+	public ChatLog getChatLog() {
+		return chatLog;
+	}
 }

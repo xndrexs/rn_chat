@@ -10,7 +10,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 import java.util.UUID;
 import controller.ChatController;
 import helper.MessageHandler;
@@ -23,8 +22,7 @@ public class ChatClient extends ChatBase {
 		
 	private String userName;
 	private String userPassword;
-	private Socket socket;	
-	private Scanner read;
+	private Socket socket;
 	private String adress;
 	private ChatController controller;
 	private MessageHandler messageHandler;
@@ -35,7 +33,6 @@ public class ChatClient extends ChatBase {
 	public ChatClient(String adress, int serverPort) {
 		super(SenderType.Client);
 		
-		read = new Scanner(System.in);
 		clientPort = PortFinder.findFreePort();
 		messageHandler = new MessageHandler(id, clientPort);
 
@@ -48,23 +45,6 @@ public class ChatClient extends ChatBase {
 		connectToServer();
 		startMessageReceiveThread();
 		startMessageReceiveThreadForTCP();
-		//startMessageThread();
-	}
-	
-	// Noch kein Thread... Aktuell f�r TCP an Server
-	private void startMessageThread() {
-		while(true) {
-			printer.printMessage("Send message: ");
-			String message = read.nextLine();
-			sendMessage(message);
-			if (message.equals("Bye")) {
-				try {
-					socket.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	/**
@@ -100,15 +80,13 @@ public class ChatClient extends ChatBase {
 	}
 	
 	public void sendUDPMessage(ChatUser user, String message) {
-		if (user != null) {
-			UDPSender sender = new UDPSender("127.0.0.1", user.getPort());
-			sender.sendMessage(message);
-			printer.printMessage("SENT: " + message);
-		}
+		System.out.println(user.getPort() + user.getID().toString());
+		UDPSender sender = new UDPSender("127.0.0.1", user.getPort());
+		sender.sendMessage(message);
 	}
 	
 	/**
-	 * Startet einen Thread (TCP) für Nachrichten vom Server (aktuell nur, wenn ein User online geht)
+	 * Startet einen Thread (TCP) für Nachrichten vom Server (aktuell nur, wenn ein User online/offline geht)
 	 */
 	private void startMessageReceiveThreadForTCP() {
 		Thread messageReceiveThreadForUDP = new Thread(new Runnable() {
@@ -121,7 +99,6 @@ public class ChatClient extends ChatBase {
 						jsonMessage = messageReader.readLine();
 						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
 						UUID id = chatMessage.getUUID();
-						
 						if (chatMessage.getMessage().equals(MessageType.Connect.getType())) {
 							printer.printMessage("User connected: " + id);
 							ChatUser newUser = new ChatUser(id, chatMessage.getPort());
@@ -131,7 +108,6 @@ public class ChatClient extends ChatBase {
 							printer.printMessage("User disconnected: " + id);
 							clients.remove(id.toString());
 						}
-
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

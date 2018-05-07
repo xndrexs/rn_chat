@@ -29,18 +29,13 @@ public class ChatServer extends ChatBase {
 	 */
 	public void start() {
 		printer.printMessage("Starting Server ... ");
-
 		try {
-
 			server = new ServerSocket(port);
 			printer.printMessage("Server started on Port: " + server.getLocalPort());
-
 			waitForConnections();
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -111,7 +106,6 @@ public class ChatServer extends ChatBase {
 						updateClients(chatUser, MessageType.Disconnect);
 					}
 				}
-				
 			}
 		});
 		messageReceiverThread.start();
@@ -119,7 +113,6 @@ public class ChatServer extends ChatBase {
 	}
 	
 	private void updateClients(ChatUser chatUser, MessageType type) {
-				
 		for(ChatUser currentUser : clients.values()) {
 			if (!currentUser.getID().equals(chatUser.getID())) {
 				currentUser.update(MessageHandler.serializeMessageForUpdateClient(chatUser, type));
@@ -127,5 +120,4 @@ public class ChatServer extends ChatBase {
 			}
 		}
 	}
-
 }
