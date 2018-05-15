@@ -39,13 +39,11 @@ public class ChatMessageController {
 	
 	public void handleMessage(ChatMessage message) {
 		String id = message.getUUID().toString();
-		System.out.println(id);
 		if (controllers.containsKey(id)) {
 			ChatIOController controller = controllers.get(id);
 			controller.handleMessage(message);
 		} else {
 			ChatUser user = client.getClients().get(id);
-			System.out.println(user);
 			ChatIOController controller = new ChatIOController(user, client);
 			controllers.put(id, controller);
 			Platform.runLater(new Runnable() {
@@ -55,7 +53,6 @@ public class ChatMessageController {
 				}
 			});
 			controller.handleMessage(message);
-			
 		}
 	}
 }

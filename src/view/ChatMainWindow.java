@@ -21,7 +21,7 @@ public class ChatMainWindow extends BorderPane{
 		this.setRight(chatUserPane);
 		
 		chatLog = new ChatLog();
-		this.setLeft(chatLog);
+		this.setBottom(chatLog);
 		
 	}
 	

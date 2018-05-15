@@ -19,5 +19,8 @@ public class MessageFormatter {
 	public static void print(String message) {
 		System.out.println(new Date().toString() + " - " + message);
 	}
-
+	
+	public static String getPrint(String message) {
+		return new Date().toString() + " - " + message;
+	}
 }

@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.IOException;
+
+import helper.MessageFormatter;
 import model.ChatClient;
 import model.ChatMessage;
 import model.ChatServer;
@@ -17,14 +20,17 @@ public class ChatController {
 		int port = ChatServer.SERVER_PORT;
 		this.main = main;
 		
-		this.client = new ChatClient("localhost", port);
-		this.client.setController(this);
-		
-		this.messageController = new ChatMessageController(main.getChatMessageWindow(), client);		
-		this.userController = new ChatUserController(main.getChatUserPane(), client);
-		this.userController.setOutputController(messageController);
-		
-		setupInfoPane();
+		try {
+			this.client = new ChatClient("localhost", port, this);
+			this.messageController = new ChatMessageController(main.getChatMessageWindow(), client);		
+			this.userController = new ChatUserController(main.getChatUserPane(), client);
+			this.userController.setOutputController(messageController);
+			setupInfoPane();
+		} catch (IOException e) {
+			System.out.println("Unknown Host ...");
+			logMessage("Unknown Host ... ");
+			e.printStackTrace();
+		}
 	}
 	
 	private void setupInfoPane() {
@@ -35,5 +41,10 @@ public class ChatController {
 	
 	public void notifyMessage(ChatMessage message) {
 		messageController.handleMessage(message);
+	}
+	
+	public void logMessage(String message) {
+		String modifiedMessage = MessageFormatter.getPrint(message);
+		main.getChatLog().displayLogMessage(modifiedMessage);
 	}
 }
