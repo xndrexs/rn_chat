@@ -37,7 +37,7 @@ public class ChatIOController {
 		;
 		this.textArea = input.getTextArea();
 		this.sendButton = input.getSendButton();
-		this.messageHandler = new MessageHandler(client.getId(), user.getPort());
+		this.messageHandler = new MessageHandler(client.getId(), user.getPort(), user.getAddress());
 		this.user = user;
 		setupButton();
 		

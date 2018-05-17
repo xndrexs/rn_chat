@@ -12,9 +12,11 @@ public class MessageHandler {
 	
 	UUID id;
 	int port;
+	String address;
 	
-	public MessageHandler(UUID id, int port) {
+	public MessageHandler(UUID id, int port, String address) {
 		this.id = id;
+		this.address = address;
 		this.port = port;
 	}
 
@@ -36,9 +38,9 @@ public class MessageHandler {
 	 * Deserialisiert eine JSON-Nachricht in ID des Senders und der Nachricht
 	 * 
 	 * @param jsonMessage
-	 *            Übergabe des JSON als String
+	 *            ï¿½bergabe des JSON als String
 	 * @return Gibt ein ChatMessage Objekt mit ID des Senders als UUID und der
-	 *         Nachricht als String zurück
+	 *         Nachricht als String zurï¿½ck
 	 */
 	public String serializeMessage(String message) {
 		JSONObject json = new JSONObject();
@@ -58,6 +60,7 @@ public class MessageHandler {
 		try {
 			json.put("id", chatUser.getID());
 			json.put("port",chatUser.getPort());
+			json.put("address", chatUser.getAddress());
 			json.put("message", type.getType());
 		} catch (JSONException e) {
 			e.printStackTrace();

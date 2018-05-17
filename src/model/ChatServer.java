@@ -21,7 +21,7 @@ public class ChatServer extends ChatBase {
 	public ChatServer() {
 		super(SenderType.Server);
 		this.port = SERVER_PORT;
-		this.messageHandler = new MessageHandler(id, port);
+		this.messageHandler = new MessageHandler(id, port, "localhost");
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class ChatServer extends ChatBase {
 
 						clients.put(clientId.toString(), chatUser);
 						updateClients(chatUser, MessageType.Connect);
-						
+
 						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
 								+ clientSocket.getRemoteSocketAddress() + ")");
 
@@ -86,6 +86,7 @@ public class ChatServer extends ChatBase {
 
 	/**
 	 * Nimmt Nachrichten entgegen in einem eigenen Thread
+	 * 
 	 * @param chatUser
 	 */
 	private void waitForMessages(ChatUser chatUser) {
@@ -95,11 +96,14 @@ public class ChatServer extends ChatBase {
 				while (chatUser.isOnline()) {
 					try {
 						String jsonMessage = chatUser.getMessageReader().readLine();
-						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
-						if (chatMessage != null) {
-							printer.printMessage("Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
+						if (jsonMessage != null) {
+							ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
+							printer.printMessage(
+									"Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
 						}
 					} catch (IOException e1) {
+						e1.printStackTrace();
+					} finally {
 						chatUser.disconnect();
 						clients.remove(chatUser.getID().toString());
 						printer.printMessage("Client disconnected: " + chatUser.getID() + " ... Bye Bye!");
@@ -111,9 +115,9 @@ public class ChatServer extends ChatBase {
 		messageReceiverThread.start();
 		printer.printMessage("Waiting for Messages from " + chatUser.getID() + " ...");
 	}
-	
+
 	private void updateClients(ChatUser chatUser, MessageType type) {
-		for(ChatUser currentUser : clients.values()) {
+		for (ChatUser currentUser : clients.values()) {
 			if (!currentUser.getID().equals(chatUser.getID())) {
 				currentUser.update(MessageHandler.serializeMessageForUpdateClient(chatUser, type));
 				chatUser.update(MessageHandler.serializeMessageForUpdateClient(currentUser, type));

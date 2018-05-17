@@ -29,11 +29,11 @@ public class ChatClient extends ChatBase {
 	private int serverPort;
 	private int clientPort;
 
-	public ChatClient(String adress, int serverPort, ChatController controller) throws IOException{
+	public ChatClient(String adress, int serverPort, ChatController controller) throws IOException {
 		super(SenderType.Client);
 
 		clientPort = PortFinder.findFreePort();
-		messageHandler = new MessageHandler(id, clientPort);
+		messageHandler = new MessageHandler(id, clientPort, adress);
 
 		this.controller = controller;
 		this.serverPort = serverPort;
@@ -61,6 +61,7 @@ public class ChatClient extends ChatBase {
 
 	/**
 	 * Sendet eine Nachricht an den verbundenen Socket (TCP)
+	 * 
 	 * @param message
 	 */
 	public void sendMessage(String message) {
@@ -90,7 +91,7 @@ public class ChatClient extends ChatBase {
 						UUID id = chatMessage.getUUID();
 						if (chatMessage.getMessage().equals(MessageType.Connect.getType())) {
 							controller.logMessage("User connected: " + id);
-							ChatUser newUser = new ChatUser(id, chatMessage.getPort());
+							ChatUser newUser = new ChatUser(id, chatMessage.getPort(), chatMessage.getAddress());
 							clients.put(id.toString(), newUser);
 						}
 						if (chatMessage.getMessage().equals(MessageType.Disconnect.getType())) {
@@ -109,9 +110,9 @@ public class ChatClient extends ChatBase {
 	}
 
 	/**
-	 * Startet einen Thread für Nachrichten, welche über UDP an den Client
-	 * geschickt werden Muss noch umgebaut werden, weil für jede Nachricht ein
-	 * Socket erstellt wird
+	 * Startet einen Thread für Nachrichten, welche über UDP an den Client geschickt
+	 * werden Muss noch umgebaut werden, weil für jede Nachricht ein Socket erstellt
+	 * wird
 	 */
 	private void startMessageReceiveThreadUDP() {
 

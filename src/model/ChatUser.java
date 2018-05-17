@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.UUID;
 
 public class ChatUser {
@@ -16,6 +17,7 @@ public class ChatUser {
 	private PrintWriter messageWriter;
 	private BufferedReader messageReader;
 	private int port;
+	private String address;
 	
 	private boolean online;
 	
@@ -33,9 +35,10 @@ public class ChatUser {
 		}
 	}
 	
-	public ChatUser(UUID id, int port) {
+	public ChatUser(UUID id, int port, String address) {
 		this.id = id;
 		this.port = port;
+		this.address = address;
 	}
 	
 	public void sendMessage(String message) {
@@ -64,6 +67,10 @@ public class ChatUser {
 	
 	public int getPort() {
 		return port;
+	}
+	
+	public String getAddress() {
+		return address;
 	}
 	
 	public void disconnect() {
