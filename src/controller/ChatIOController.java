@@ -45,7 +45,7 @@ public class ChatIOController {
 
 			@Override
 			public void handle(Event event) {
-				client.sendUDPMessage(user, "User closed Tab");
+				sendMessage("User closed your MessageTab");
 			}
 		};
 		tab.setOnClosed(tabClosed);
@@ -72,12 +72,16 @@ public class ChatIOController {
 			public void handle(Event event) {
 				String message = textArea.getText();
 				if (message != null) {
-					client.sendUDPMessage(user, messageHandler.serializeMessage(message));
+					sendMessage(message);
 					displayOwnMessage(message);
 				}
 				textArea.clear();
 			}
 		};
 		sendButton.addEventHandler(eventType, eventHandler);
+	}
+	
+	private void sendMessage(String message) {
+		client.sendUDPMessage(user, messageHandler.serializeMessage(message));
 	}
 }
