@@ -71,7 +71,7 @@ public class ChatClient extends ChatBase {
 	}
 
 	public void sendUDPMessage(ChatUser user, String message) {
-		UDPSender sender = new UDPSender("127.0.0.1", user.getPort());
+		UDPSender sender = new UDPSender(user.getAddress(), user.getPort());
 		sender.sendMessage(message);
 	}
 
