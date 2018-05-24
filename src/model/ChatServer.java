@@ -102,7 +102,7 @@ public class ChatServer extends ChatBase {
 									"Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
 						}
 					} catch (IOException e1) {
-						e1.printStackTrace();
+						// e1.printStackTrace();
 					} finally {
 						chatUser.disconnect();
 						clients.remove(chatUser.getID().toString());

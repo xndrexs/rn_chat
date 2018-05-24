@@ -8,21 +8,25 @@ public class ChatMainWindow extends BorderPane{
 	ChatInfoPane chatInfo;
 	ChatUserPane chatUserPane;
 	ChatLog chatLog;
+	ChatConnectWindow connect;
 	
 	public ChatMainWindow() {
-		
-		chatMessageWindow = new ChatMessageWindow();
-		this.setCenter(chatMessageWindow);
+		connect = new ChatConnectWindow();
+		this.setCenter(connect);
 		
 		chatInfo = new ChatInfoPane();
 		this.setTop(chatInfo);
 		
+		chatLog = new ChatLog();
+		this.setBottom(chatLog);
+	}
+	
+	public void setupChatWindow() {
 		chatUserPane = new ChatUserPane();
 		this.setRight(chatUserPane);
 		
-		chatLog = new ChatLog();
-		this.setBottom(chatLog);
-		
+		chatMessageWindow = new ChatMessageWindow();
+		this.setCenter(chatMessageWindow);
 	}
 	
 	public ChatMessageWindow getChatMessageWindow() {
