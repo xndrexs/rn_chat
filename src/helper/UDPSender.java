@@ -35,6 +35,7 @@ public class UDPSender {
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, port);
 		try {
 			clientSocket.send(sendPacket);
+			System.out.println("Message: " + ipAddress + " " + port + " " + sendData);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

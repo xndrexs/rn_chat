@@ -47,6 +47,7 @@ public class MessageHandler {
 		try {
 			json.put("id", id);
 			json.put("port", port);
+			json.put("address", address);
 			json.put("message", message);
 		} catch (JSONException e) {
 			e.printStackTrace();

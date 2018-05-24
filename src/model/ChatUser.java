@@ -21,12 +21,13 @@ public class ChatUser {
 	
 	private boolean online;
 	
-	public ChatUser(UUID id, Socket socket, BufferedReader messageReader, int port) {
+	public ChatUser(UUID id, Socket socket, BufferedReader messageReader, int port, String address) {
 		this.id = id;
 		this.socket = socket;
 		this.messageReader = messageReader;
 		this.online = true;
 		this.port = port;
+		this.address = address;
 		
 		try {
 			messageWriter = new PrintWriter(socket.getOutputStream(), true);

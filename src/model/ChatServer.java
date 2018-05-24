@@ -60,9 +60,10 @@ public class ChatServer extends ChatBase {
 						ChatMessage chatMessage = messageHandler.deserializeMessage(clientMessageReader.readLine());
 						UUID clientId = chatMessage.getUUID();
 						int port = chatMessage.getPort();
+						String address = chatMessage.getAddress();
 
 						// Neuen User aus den Daten erstellen
-						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port);
+						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port, address);
 
 						clients.put(clientId.toString(), chatUser);
 						updateClients(chatUser, MessageType.Connect);
