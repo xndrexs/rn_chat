@@ -90,7 +90,7 @@ public class ChatClient extends ChatBase {
 						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
 						UUID id = chatMessage.getUUID();
 						if (chatMessage.getMessage().equals(MessageType.Connect.getType())) {
-							controller.logMessage("User connected: " + id);
+							controller.logMessage("User connected: " + id + " from " + chatMessage.getAddress());
 							ChatUser newUser = new ChatUser(id, chatMessage.getPort(), chatMessage.getAddress());
 							clients.put(id.toString(), newUser);
 						}

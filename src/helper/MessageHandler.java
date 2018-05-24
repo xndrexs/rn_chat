@@ -27,7 +27,8 @@ public class MessageHandler {
 			UUID clientId = UUID.fromString(json.getString("id"));
 			String message = json.getString("message");
 			int port = json.getInt("port");
-			chatMessage.fillMessage(clientId, port, message);
+			String address = json.getString("address");
+			chatMessage.fillMessage(clientId, port, message, address);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

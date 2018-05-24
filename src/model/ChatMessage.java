@@ -24,9 +24,10 @@ public class ChatMessage {
 	public int getPort() { return port; };
 	public String getAddress() { return address; };
 	
-	public void fillMessage(UUID id, int port, String message) {
+	public void fillMessage(UUID id, int port, String message, String address) {
 		this.id = id;
 		this.port = port;
 		this.message = message;
+		this.address = address;
 	}
 }

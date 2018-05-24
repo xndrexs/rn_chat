@@ -26,7 +26,7 @@ public class UDPSender {
 		
 		try {
 			clientSocket = new DatagramSocket();
-			ipAddress = InetAddress.getByName(address);
+			ipAddress = InetAddress.getByName(address.replace("/", ""));
 		} catch (SocketException e) {
 			e.printStackTrace();
 		} catch (UnknownHostException e) {

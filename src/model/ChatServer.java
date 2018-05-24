@@ -63,13 +63,13 @@ public class ChatServer extends ChatBase {
 						String address = chatMessage.getAddress();
 
 						// Neuen User aus den Daten erstellen
-						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port, address);
+						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port, clientSocket.getInetAddress().toString());
 
 						clients.put(clientId.toString(), chatUser);
 						updateClients(chatUser, MessageType.Connect);
 
 						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
-								+ clientSocket.getRemoteSocketAddress() + ")");
+								+ clientSocket.getInetAddress().toString() + ")");
 
 						// Starte neuen Thread f�r diesen User (Zum Senden und Empfangen von
 						// Nachrichten)
