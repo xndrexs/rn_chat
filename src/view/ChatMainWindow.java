@@ -11,8 +11,11 @@ public class ChatMainWindow extends BorderPane{
 	ChatConnectWindow connect;
 	
 	public ChatMainWindow() {
-		connect = new ChatConnectWindow();
-		this.setCenter(connect);
+		chatUserPane = new ChatUserPane();
+		this.setRight(chatUserPane);
+		
+		chatMessageWindow = new ChatMessageWindow();
+		this.setCenter(chatMessageWindow);
 		
 		chatInfo = new ChatInfoPane();
 		this.setTop(chatInfo);
@@ -22,11 +25,7 @@ public class ChatMainWindow extends BorderPane{
 	}
 	
 	public void setupChatWindow() {
-		chatUserPane = new ChatUserPane();
-		this.setRight(chatUserPane);
-		
-		chatMessageWindow = new ChatMessageWindow();
-		this.setCenter(chatMessageWindow);
+
 	}
 	
 	public ChatMessageWindow getChatMessageWindow() {
