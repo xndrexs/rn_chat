@@ -21,7 +21,7 @@ public class ChatController {
 		this.main = main;
 		
 		try {
-			this.client = new ChatClient("localhost", port, this);
+			this.client = new ChatClient("172.26.35.117", port, this);
 			this.messageController = new ChatMessageController(main.getChatMessageWindow(), client);		
 			this.userController = new ChatUserController(main.getChatUserPane(), client);
 			this.userController.setOutputController(messageController);
