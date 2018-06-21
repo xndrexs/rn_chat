@@ -8,7 +8,6 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.input.MouseEvent;
 import model.ChatClient;
-import model.ChatServer;
 import view.ChatConnectWindow;
 
 public class ChatConnectController {

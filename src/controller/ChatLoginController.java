@@ -29,7 +29,6 @@ public class ChatLoginController {
 			public void handle(Event arg0) {
 				username = login.getLoginUsernameInput();
 				password = login.getLoginPasswordInput();
-
 				manager.startChatProcess();
 			}
 		};
