@@ -5,6 +5,7 @@ import controller.ChatController;
 import controller.ChatLoginController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.ChatClient;
 import view.ChatConnectWindow;
 import view.ChatLoginWindow;
 import view.ChatMainWindow;
@@ -17,6 +18,7 @@ public class StageManager {
 	ChatConnectController connectController;
 	ChatConnectWindow connectWindow;
 	Scene scene;
+	ChatClient client;
 	
 	ChatLoginWindow loginWindow;
 	ChatLoginController loginController;
@@ -37,12 +39,18 @@ public class StageManager {
 	}
 
 	public void startLoginProcess() {
+		this.client = connectController.getChatClient();
 		loginWindow = new ChatLoginWindow();
-		loginController = new ChatLoginController(loginWindow);
+		loginController = new ChatLoginController(loginWindow, this, client);
 		scene = new Scene(loginWindow, 800, 800);
 		
 		stage.setTitle("Login");
 		stage.setScene(scene);
+	}
+
+	public void startChatProcess() {
+		
+		
 	}
 	
 }

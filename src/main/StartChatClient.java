@@ -1,13 +1,8 @@
 package main;
 
-import controller.ChatConnectController;
-import controller.ChatController;
 import helper.StageManager;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import view.ChatConnectWindow;
-import view.ChatMainWindow;
 
 public class StartChatClient extends Application {
 	

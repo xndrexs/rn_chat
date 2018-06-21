@@ -38,7 +38,7 @@ public class ChatLoginWindow extends GridPane {
 		add(registerButton, 1, 6);
 	}
 	
-	public Button getLoginConnectButton() {
+	public Button getLoginButton() {
 		return loginButton;
 	}
 	
@@ -50,7 +50,7 @@ public class ChatLoginWindow extends GridPane {
 		return loginPassword.getText();
 	}
 	
-	public Button getRegisterConnectButton() {
+	public Button getRegisterButton() {
 		return registerButton;
 	}
 	

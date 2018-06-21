@@ -29,10 +29,8 @@ public class ChatConnectController {
 				address = connect.getAdressInput();
 				port = connect.getPortInput();
 				
-				int port = ChatServer.SERVER_PORT;
-				
 				try {
-					client = new ChatClient(address, port);
+					client = new ChatClient(address, Integer.parseInt(port));
 					manager.startLoginProcess();
 				} catch (IOException e) {
 					System.out.println("Unknown Host ...");
@@ -45,4 +43,8 @@ public class ChatConnectController {
 	
 	public String getAddress() { return address; }
 	public String getPort() { return port; }
+	
+	public ChatClient getChatClient() {
+		return client;
+	}
 }

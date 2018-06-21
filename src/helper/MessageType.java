@@ -1,7 +1,7 @@
 package helper;
 
 public enum MessageType {
-	Disconnect("Disconnect"), Connect("Connect");
+	Disconnect("Disconnect"), Connect("Connect"), Login("Login"), Register("Register");
 	
 	private String type;
 	
