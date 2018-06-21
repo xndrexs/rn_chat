@@ -7,6 +7,8 @@ public class ChatMessage {
 	private int port;
 	private String address;
 	private String message;
+	private String username;
+	private String password;
 	
 	public ChatMessage(UUID id, String message, int port, String address) {
 		this.port = port;
@@ -17,6 +19,11 @@ public class ChatMessage {
 	
 	public ChatMessage() {
 		
+	}
+	
+	public void setLoginData(String username, String password) {
+		this.username = username;
+		this.password = password;
 	}
 	
 	public UUID getUUID() { return id; };

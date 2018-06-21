@@ -29,6 +29,12 @@ public class MessageHandler {
 			int port = json.getInt("port");
 			String address = json.getString("address");
 			chatMessage.fillMessage(clientId, port, message, address);
+			
+			if (chatMessage.getMessage().equals(MessageType.Connect.getType())) {
+				chatMessage.setLoginData(json.getString("username"), json.getString("password"));
+			}
+			
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -50,6 +56,21 @@ public class MessageHandler {
 			json.put("port", port);
 			json.put("address", address);
 			json.put("message", message);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	public String serializeMessageForLogin(String username, String password) {
+		JSONObject json = new JSONObject();
+		try {
+			json.put("id", id);
+			json.put("port", port);
+			json.put("address", address);
+			json.put("username", username);
+			json.put("password", password);
+			json.put("message", MessageType.Connect);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
