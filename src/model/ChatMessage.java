@@ -30,6 +30,8 @@ public class ChatMessage {
 	public String getMessage() { return message; };
 	public int getPort() { return port; };
 	public String getAddress() { return address; };
+	public String getUsername() { return username; };
+	public String getPassword() { return password; };
 	
 	public void fillMessage(UUID id, int port, String message, String address) {
 		this.id = id;

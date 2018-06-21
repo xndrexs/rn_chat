@@ -3,7 +3,9 @@ package helper;
 import controller.ChatConnectController;
 import controller.ChatController;
 import controller.ChatLoginController;
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import model.ChatClient;
 import view.ChatConnectWindow;
@@ -31,8 +33,6 @@ public class StageManager {
 		connectWindow = new ChatConnectWindow();
 		connectController = new ChatConnectController(connectWindow, this);
 		scene = new Scene(connectWindow, 800, 800);
-		//main = new ChatMainWindow();
-		//controller = new ChatController(main);
 		stage.setTitle("Connect");
 		stage.setScene(scene);
 		stage.show();
@@ -49,8 +49,19 @@ public class StageManager {
 	}
 
 	public void startChatProcess() {
+		main = new ChatMainWindow();
+		controller = new ChatController(main, client);
+		client.setController(controller);
+		scene = new Scene(main, 800, 800);
 		
-		
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				stage.setTitle("Chat");
+				stage.setScene(scene);
+			}
+		});
+
 	}
 	
 }

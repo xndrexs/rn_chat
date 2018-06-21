@@ -50,12 +50,24 @@ public class ChatUser {
 		return messageReader;
 	}
 	
+	public PrintWriter getMessageWriter() {
+		return messageWriter;
+	}
+	
 	public UUID getID() {
 		return id;
 	}
 	
 	public boolean isOnline() {
 		return online;
+	}
+	
+	public String getUsername() {
+		return userName;
+	}
+	
+	public String getPassword() {
+		return userPassword;
 	}
 	
 	public void goOffline() {
@@ -82,6 +94,14 @@ public class ChatUser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void setUsername(String username) {
+		this.userName = username;
+	}
+
+	public void setPassword(String password) {
+		this.userPassword = password;
 	}
 
 }

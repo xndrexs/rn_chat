@@ -16,6 +16,7 @@ import helper.MessageHandler;
 import helper.MessageType;
 import helper.PortFinder;
 import helper.SenderType;
+import helper.StageManager;
 import helper.UDPSender;
 
 public class ChatClient extends ChatBase {
@@ -28,9 +29,12 @@ public class ChatClient extends ChatBase {
 	private MessageHandler messageHandler;
 	private int serverPort;
 	private int clientPort;
-
-	public ChatClient(String adress, int serverPort) throws IOException {
+	private StageManager manager;
+	
+	public ChatClient(String adress, int serverPort, StageManager manager) throws IOException {
 		super(SenderType.Client);
+		
+		this.manager = manager;
 
 		clientPort = PortFinder.findFreePort();
 		messageHandler = new MessageHandler(id, clientPort, adress);
@@ -69,6 +73,12 @@ public class ChatClient extends ChatBase {
 		messageWriter.println(json);
 		messageWriter.flush();
 	}
+	
+	public void sendMessageForLogin(String username, String password, MessageType type) {
+		String json = messageHandler.serializeMessageforLogin(username, password, type);
+		messageWriter.println(json);
+		messageWriter.flush();
+	}
 
 	public void sendUDPMessage(ChatUser user, String message) {
 		UDPSender sender = new UDPSender(user.getAddress(), user.getPort());
@@ -87,16 +97,25 @@ public class ChatClient extends ChatBase {
 					String jsonMessage;
 					try {
 						jsonMessage = messageReader.readLine();
-						ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
-						UUID id = chatMessage.getUUID();
-						if (chatMessage.getMessage().equals(MessageType.Connect.getType())) {
-							controller.logMessage("User connected: " + id + " from " + chatMessage.getAddress());
-							ChatUser newUser = new ChatUser(id, chatMessage.getPort(), chatMessage.getAddress());
-							clients.put(id.toString(), newUser);
-						}
-						if (chatMessage.getMessage().equals(MessageType.Disconnect.getType())) {
-							controller.logMessage("User disconnected: " + id);
-							clients.remove(id.toString());
+						if (jsonMessage != null) {
+							ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
+							UUID id = chatMessage.getUUID();
+							if (chatMessage.getMessage().equals(MessageType.Connect.getType())) {
+								controller.logMessage("User connected: " + id + " from " + chatMessage.getAddress());
+								ChatUser newUser = new ChatUser(id, chatMessage.getPort(), chatMessage.getAddress());
+								clients.put(id.toString(), newUser);
+							}
+							if (chatMessage.getMessage().equals(MessageType.Disconnect.getType())) {
+								controller.logMessage("User disconnected: " + id);
+								clients.remove(id.toString());
+							}
+							if (chatMessage.getMessage().equals("Success")) {
+								System.out.println("SUCCESS");
+								manager.startChatProcess();
+							}
+							if (chatMessage.getMessage().equals("Failed")) {
+								System.out.println("FAILED");
+							}
 						}
 					} catch (IOException e) {
 						System.out.println("Error starting TCP Thread");
