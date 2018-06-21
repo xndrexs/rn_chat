@@ -1,16 +1,17 @@
 package main;
 
+import controller.ChatConnectController;
 import controller.ChatController;
+import helper.StageManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import view.ChatConnectWindow;
 import view.ChatMainWindow;
 
 public class StartChatClient extends Application {
 	
-	ChatController controller;
-	ChatMainWindow main;
-	Scene scene;
+	StageManager manager;
 	
 	public static void main(String [] args) {
 		launch(args);
@@ -19,13 +20,8 @@ public class StartChatClient extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		main = new ChatMainWindow();
-		scene = new Scene(main, 800, 800);
-		controller = new ChatController(main);
-		
-		stage.setTitle("Chat");
-		stage.setScene(scene);
-		stage.show();
+		manager = new StageManager(stage);
+		manager.startConnectProcess();
 	}
 
 }

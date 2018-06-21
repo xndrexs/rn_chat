@@ -29,18 +29,18 @@ public class ChatClient extends ChatBase {
 	private int serverPort;
 	private int clientPort;
 
-	public ChatClient(String adress, int serverPort, ChatController controller) throws IOException {
+	public ChatClient(String adress, int serverPort) throws IOException {
 		super(SenderType.Client);
 
 		clientPort = PortFinder.findFreePort();
 		messageHandler = new MessageHandler(id, clientPort, adress);
 
-		this.controller = controller;
+		// this.controller = controller;
 		this.serverPort = serverPort;
 		this.adress = adress;
 
-		controller.logMessage("Starting Client ... ");
-		controller.logMessage("Connecting to Server ... ");
+		//controller.logMessage("Starting Client ... ");
+		//controller.logMessage("Connecting to Server ... ");
 
 		connectToServer();
 		startMessageReceiveThreadForTCP();
@@ -52,7 +52,7 @@ public class ChatClient extends ChatBase {
 	 */
 	private void connectToServer() throws IOException {
 		socket = new Socket(adress, serverPort);
-		controller.logMessage("Connected to: " + adress + "/" + serverPort);
+		// controller.logMessage("Connected to: " + adress + "/" + serverPort);
 		messageWriter = new PrintWriter(socket.getOutputStream(), true);
 		messageReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		// Schicke ID und Port an Server
@@ -106,7 +106,7 @@ public class ChatClient extends ChatBase {
 			}
 		});
 		messageReceiveThreadForUDP.start();
-		controller.logMessage("Message Receiver started for TCP ... ");
+		// controller.logMessage("Message Receiver started for TCP ... ");
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class ChatClient extends ChatBase {
 			}
 		});
 		messageReceiverThread.start();
-		controller.logMessage("Message Receiver started for UDP ... ");
+		//controller.logMessage("Message Receiver started for UDP ... ");
 	}
 
 	public SocketAddress getLocalAddress() {

@@ -1,11 +1,7 @@
 package controller;
-
-import java.io.IOException;
-
 import helper.MessageFormatter;
 import model.ChatClient;
 import model.ChatMessage;
-import model.ChatServer;
 import view.ChatMainWindow;
 
 public class ChatController {
@@ -15,22 +11,12 @@ public class ChatController {
 	private ChatClient client;
 	private ChatUserController userController;
 	
-	public ChatController(ChatMainWindow main) {
-		
-		int port = ChatServer.SERVER_PORT;
+	public ChatController(ChatMainWindow main, ChatClient client) {
 		this.main = main;
-		
-		try {
-			this.client = new ChatClient("172.26.35.117", port, this);
-			this.messageController = new ChatMessageController(main.getChatMessageWindow(), client);		
-			this.userController = new ChatUserController(main.getChatUserPane(), client);
-			this.userController.setOutputController(messageController);
-			setupInfoPane();
-		} catch (IOException e) {
-			System.out.println("Unknown Host ...");
-			logMessage("Unknown Host ... ");
-			e.printStackTrace();
-		}
+		this.messageController = new ChatMessageController(main.getChatMessageWindow(), client);		
+		this.userController = new ChatUserController(main.getChatUserPane(), client);
+		this.userController.setOutputController(messageController);
+		setupInfoPane();
 	}
 	
 	private void setupInfoPane() {
