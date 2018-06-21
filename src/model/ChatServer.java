@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.UUID;
 import helper.MessageHandler;
 import helper.MessageType;
@@ -63,10 +65,10 @@ public class ChatServer extends ChatBase {
 						String address = chatMessage.getAddress();
 
 						// Neuen User aus den Daten erstellen
-						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port, clientSocket.getInetAddress().toString());
+						ChatUser chatUser = new ChatUser(clientId, clientSocket, clientMessageReader, port,
+								clientSocket.getInetAddress().toString());
 
 						clients.put(clientId.toString(), chatUser);
-						updateClients(chatUser, MessageType.Connect);
 
 						printer.printMessage("Client connected: " + clientId.toString() + " (from: "
 								+ clientSocket.getInetAddress().toString() + ")");
@@ -101,14 +103,21 @@ public class ChatServer extends ChatBase {
 							ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
 							printer.printMessage(
 									"Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
+							if (chatMessage.getMessage().equals(MessageType.Login.getType())) {
+								checkLogin(chatMessage);
+							}
+							if (chatMessage.getMessage().equals(MessageType.Register.getType())) {
+								registerNewUser(chatMessage);
+							}
+
 						}
 					} catch (IOException e1) {
-						// e1.printStackTrace();
-					} finally {
 						chatUser.disconnect();
 						clients.remove(chatUser.getID().toString());
 						printer.printMessage("Client disconnected: " + chatUser.getID() + " ... Bye Bye!");
 						updateClients(chatUser, MessageType.Disconnect);
+					} finally {
+
 					}
 				}
 			}
@@ -123,6 +132,54 @@ public class ChatServer extends ChatBase {
 				currentUser.update(MessageHandler.serializeMessageForUpdateClient(chatUser, type));
 				chatUser.update(MessageHandler.serializeMessageForUpdateClient(currentUser, type));
 			}
+		}
+	}
+
+	private void checkLogin(ChatMessage chatMessage) {
+		String id = chatMessage.getUUID().toString();
+		ChatUser user = getClients().get(id);
+		String username = user.getUsername();
+		String password = user.getPassword();
+		if (username != null && password != null) {
+			if (username.equals(chatMessage.getUsername()) && password.equals(chatMessage.getPassword())) {
+				sendLoginResponse(user, "Success");
+				user.setUsername(username);
+				user.setPassword(password);
+				updateClients(user, MessageType.Connect);
+			} else {
+				sendLoginResponse(user, "Failed");
+			}
+		} else {
+			sendLoginResponse(user, "Failed");
+		}
+
+	}
+	
+	private void sendLoginResponse(ChatUser user, String result) {
+		String message = messageHandler.serializeMessage(result);
+		user.getMessageWriter().println(message);
+	}
+
+	private void registerNewUser(ChatMessage chatMessage) {
+		String id = chatMessage.getUUID().toString();
+		ChatUser user = getClients().get(id);
+		String username = chatMessage.getUsername();
+		String password = chatMessage.getPassword();
+		Boolean exists = false;
+		Iterator<Entry<String, ChatUser>> it = getClients().entrySet().iterator();
+		while(it.hasNext()) {
+			ChatUser nextUser = it.next().getValue();
+			if(username.equals(nextUser.getUsername())) {
+				exists = true;
+			}
+		}
+		if (!exists) {
+			user.setUsername(username);
+			user.setPassword(password);
+			sendLoginResponse(user, "Success");
+			updateClients(user, MessageType.Connect);
+		} else {
+			sendLoginResponse(user, "Failed");
 		}
 	}
 }

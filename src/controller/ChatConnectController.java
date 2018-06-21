@@ -30,7 +30,7 @@ public class ChatConnectController {
 				port = connect.getPortInput();
 				
 				try {
-					client = new ChatClient(address, Integer.parseInt(port));
+					client = new ChatClient(address, Integer.parseInt(port), manager);
 					manager.startLoginProcess();
 				} catch (IOException e) {
 					System.out.println("Unknown Host ...");

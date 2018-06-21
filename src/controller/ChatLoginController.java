@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 
+import helper.MessageType;
 import helper.StageManager;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -27,10 +28,7 @@ public class ChatLoginController {
 		EventHandler<Event> loginEventHandler = new EventHandler<Event>() {
 			@Override
 			public void handle(Event arg0) {
-				username = login.getLoginUsernameInput();
-				password = login.getLoginPasswordInput();
-
-				manager.startChatProcess();
+				client.sendMessageForLogin(login.getLoginUsernameInput(), login.getLoginPasswordInput(), MessageType.Login);
 			}
 		};
 		login.getLoginButton().addEventHandler(loginEventType, loginEventHandler);
@@ -40,10 +38,7 @@ public class ChatLoginController {
 
 			@Override
 			public void handle(Event arg0) {
-				username = login.getRegisterUsernameInput();
-				password = login.getRegisterPasswordInput();
-				
-				manager.startChatProcess();
+				client.sendMessageForLogin(login.getRegisterUsernameInput(), login.getRegisterPasswordInput(), MessageType.Register);
 			}
 		};
 		login.getRegisterButton().addEventHandler(registerEventType, registerEventHandler);

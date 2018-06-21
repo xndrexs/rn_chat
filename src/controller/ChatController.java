@@ -13,6 +13,7 @@ public class ChatController {
 	
 	public ChatController(ChatMainWindow main, ChatClient client) {
 		this.main = main;
+		this.client = client;
 		this.messageController = new ChatMessageController(main.getChatMessageWindow(), client);		
 		this.userController = new ChatUserController(main.getChatUserPane(), client);
 		this.userController.setOutputController(messageController);
