@@ -51,7 +51,7 @@ public class ChatServer extends ChatBase {
 					try {
 						// Hier wartet der Server auf eine eingehende Verbindung
 						Socket clientSocket = server.accept();
-						printer.printMessage("Connetion incoming...");
+						printer.printMessage("Connection incoming...");
 
 						// Neuen Reader f�r den verbundenen Client schicken (zum Empfangen von
 						// Nachrichten)
