@@ -9,7 +9,6 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.UUID;
 import controller.ChatController;
 import helper.MessageHandler;

@@ -5,7 +5,6 @@ import controller.ChatController;
 import controller.ChatLoginController;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import model.ChatClient;
 import view.ChatConnectWindow;
@@ -32,7 +31,7 @@ public class StageManager {
 	public void startConnectProcess() {
 		connectWindow = new ChatConnectWindow();
 		connectController = new ChatConnectController(connectWindow, this);
-		scene = new Scene(connectWindow, 800, 800);
+		scene = new Scene(connectWindow, 300, 300);
 		stage.setTitle("Connect");
 		stage.setScene(scene);
 		stage.show();
@@ -42,7 +41,7 @@ public class StageManager {
 		this.client = connectController.getChatClient();
 		loginWindow = new ChatLoginWindow();
 		loginController = new ChatLoginController(loginWindow, this, client);
-		scene = new Scene(loginWindow, 800, 800);
+		scene = new Scene(loginWindow, 500, 500);
 		
 		stage.setTitle("Login");
 		stage.setScene(scene);

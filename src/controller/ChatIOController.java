@@ -1,16 +1,12 @@
 package controller;
 
 import java.util.Date;
-
-import helper.MessageFormatter;
 import helper.MessageHandler;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.ChatClient;
 import model.ChatMessage;

@@ -1,7 +1,5 @@
 package controller;
 
-import java.io.IOException;
-
 import helper.MessageType;
 import helper.StageManager;
 import javafx.event.Event;
@@ -9,7 +7,6 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.input.MouseEvent;
 import model.ChatClient;
-import model.ChatServer;
 import view.ChatLoginWindow;
 
 public class ChatLoginController {

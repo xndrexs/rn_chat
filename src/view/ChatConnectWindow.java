@@ -1,5 +1,6 @@
 package view;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,9 +17,14 @@ public class ChatConnectWindow extends GridPane {
 		adress = new TextField("localhost");
 		port = new TextField("55555");
 		connect = new Button("Connect");
+		setMargin(adress, new Insets(5, 10, 5, 10));
+		setMargin(port, new Insets(5, 10, 5, 10));
+		setMargin(connect, new Insets(5, 10, 5, 10));
 		
-		add(new Label("Server"), 0, 0);
-		add(new Label("Port"), 0, 1);
+		setPadding(new Insets(10, 10, 10, 10));
+		
+		add(new Label("Server:"), 0, 0);
+		add(new Label("Port:"), 0, 1);
 		add(adress, 1, 0);
 		add(port, 1, 1);
 		add(connect, 1, 2);
