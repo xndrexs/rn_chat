@@ -2,7 +2,10 @@ package model;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
+import java.util.Map.Entry;
+
 import helper.MessageFormatter;
 import helper.SenderType;
 import javafx.collections.FXCollections;
@@ -32,6 +35,19 @@ public class ChatBase {
 	
 	public ObservableMap<String, ChatUser> getClients() {
 		return clients;
+	}
+	
+	public ChatUser getClientByName(String name) {
+		ChatUser nextUser = null;
+		Iterator<Entry<String, ChatUser>> it = getClients().entrySet().iterator();
+		while(it.hasNext()) {
+			nextUser = it.next().getValue();
+			if(name.equals(nextUser.getUsername())) {
+				break;
+			}
+		}
+		
+		return nextUser;
 	}
 
 }

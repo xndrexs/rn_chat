@@ -1,9 +1,12 @@
 package view;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 public class ChatConnectWindow extends GridPane {
 	
@@ -22,6 +25,7 @@ public class ChatConnectWindow extends GridPane {
 		add(adress, 1, 0);
 		add(port, 1, 1);
 		add(connect, 1, 2);
+		setAlignment(Pos.CENTER);
 	}
 	
 	public Button getConnectButton() {

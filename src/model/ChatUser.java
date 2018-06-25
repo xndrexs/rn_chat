@@ -36,8 +36,9 @@ public class ChatUser {
 		}
 	}
 	
-	public ChatUser(UUID id, int port, String address) {
+	public ChatUser(UUID id, String username, int port, String address) {
 		this.id = id;
+		this.userName = username;
 		this.port = port;
 		this.address = address;
 	}

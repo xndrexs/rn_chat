@@ -101,11 +101,12 @@ public class ChatServer extends ChatBase {
 						String jsonMessage = chatUser.getMessageReader().readLine();
 						if (jsonMessage != null) {
 							ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
-							printer.printMessage(
-									"Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
+							printer.printMessage("Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
+							// LOGIN
 							if (chatMessage.getMessage().equals(MessageType.Login.getType())) {
 								checkLogin(chatMessage);
 							}
+							// REGISTER
 							if (chatMessage.getMessage().equals(MessageType.Register.getType())) {
 								registerNewUser(chatMessage);
 							}
@@ -156,7 +157,7 @@ public class ChatServer extends ChatBase {
 	}
 	
 	private void sendLoginResponse(ChatUser user, String result) {
-		String message = messageHandler.serializeMessage(result);
+		String message = messageHandler.serializeMessageforLoginResponse(user.getUsername(), result);
 		user.getMessageWriter().println(message);
 	}
 

@@ -102,7 +102,8 @@ public class ChatClient extends ChatBase {
 							UUID id = chatMessage.getUUID();
 							if (chatMessage.getMessage().equals(MessageType.Connect.getType())) {
 								controller.logMessage("User connected: " + id + " from " + chatMessage.getAddress());
-								ChatUser newUser = new ChatUser(id, chatMessage.getPort(), chatMessage.getAddress());
+								ChatUser newUser = new ChatUser(id, chatMessage.getUsername(), chatMessage.getPort(), chatMessage.getAddress());
+								newUser.setUsername(chatMessage.getUsername());
 								clients.put(id.toString(), newUser);
 							}
 							if (chatMessage.getMessage().equals(MessageType.Disconnect.getType())) {
@@ -111,6 +112,7 @@ public class ChatClient extends ChatBase {
 							}
 							if (chatMessage.getMessage().equals("Success")) {
 								System.out.println("SUCCESS");
+								userName = chatMessage.getUsername();
 								manager.startChatProcess();
 							}
 							if (chatMessage.getMessage().equals("Failed")) {
@@ -120,6 +122,7 @@ public class ChatClient extends ChatBase {
 					} catch (IOException e) {
 						System.out.println("Error starting TCP Thread");
 						e.printStackTrace();
+						break;
 					}
 				}
 			}
@@ -181,5 +184,9 @@ public class ChatClient extends ChatBase {
 
 	public void setController(ChatController controller) {
 		this.controller = controller;
+	}
+	
+	public String getUsername() {
+		return userName;
 	}
 }

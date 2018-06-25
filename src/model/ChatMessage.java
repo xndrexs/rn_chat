@@ -1,8 +1,11 @@
 package model;
 import java.util.UUID;
 
+import helper.MessageType;
+
 public class ChatMessage {
 
+	private MessageType type;
 	private UUID id;
 	private int port;
 	private String address;
@@ -32,6 +35,10 @@ public class ChatMessage {
 	public String getAddress() { return address; };
 	public String getUsername() { return username; };
 	public String getPassword() { return password; };
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	
 	public void fillMessage(UUID id, int port, String message, String address) {
 		this.id = id;

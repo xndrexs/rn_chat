@@ -46,18 +46,19 @@ public class ChatIOController {
 			@Override
 			public void handle(Event event) {
 				sendMessage("User closed your MessageTab");
+				
 			}
 		};
 		tab.setOnClosed(tabClosed);
 	}
 
 	public void handleMessage(ChatMessage chatMessage) {
-		String message = (new Date().toString() + " | " + user.getID() + ": " + chatMessage.getMessage());
+		String message = (new Date().toString() + " | " + user.getUsername() + ": " + chatMessage.getMessage());
 		tab.displayMessage(message);
 	}
 
 	public void displayOwnMessage(String chatMessage) {
-		String message = (new Date().toString() + " | " + client.getId() + ": " + chatMessage);
+		String message = (new Date().toString() + " | " + client.getUsername() + ": " + chatMessage);
 		tab.displayMessage(message);
 	}
 

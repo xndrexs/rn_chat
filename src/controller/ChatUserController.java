@@ -32,7 +32,7 @@ public class ChatUserController {
 
 			@Override
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String userId) {
-				ChatUser user = client.getClients().get(userId.toString());
+				ChatUser user = client.getClientByName(userId);
 				messageController.startNewChat(user);
 			}
 		});

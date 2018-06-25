@@ -19,10 +19,10 @@ public class MyMapChanger implements MapChangeListener<String, ChatUser> {
 			@Override
 			public void run() {
 				if(change.wasAdded()) {
-					listView.getItems().add(change.getKey().toString());
+					listView.getItems().add(change.getValueAdded().getUsername());
 				}
 				if(change.wasRemoved()) {
-					listView.getItems().remove(change.getKey().toString());
+					listView.getItems().remove(change.getValueRemoved().getUsername());
 				}
 			}
 		});

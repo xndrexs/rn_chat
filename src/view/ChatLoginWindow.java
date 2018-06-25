@@ -1,5 +1,6 @@
 package view;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -36,6 +37,8 @@ public class ChatLoginWindow extends GridPane {
 		add(registerUsername, 1, 4);
 		add(registerPassword, 1, 5);
 		add(registerButton, 1, 6);
+		
+		setAlignment(Pos.CENTER);
 	}
 	
 	public Button getLoginButton() {

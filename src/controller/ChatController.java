@@ -21,6 +21,7 @@ public class ChatController {
 	}
 	
 	private void setupInfoPane() {
+		main.getChatInfoPane().addInfo("Username: " + client.getUsername());
 		main.getChatInfoPane().addInfo("ClientID: " + client.getId().toString());
 		main.getChatInfoPane().addInfo("ClientAddress: " + client.getLocalAddress().toString());
 		main.getChatInfoPane().addInfo("ServerAddress: " + client.getServerAddress().toString());
