@@ -3,17 +3,16 @@ package controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
-import javafx.scene.control.Tab;
 import model.ChatClient;
 import model.ChatMessage;
 import model.ChatUser;
-import view.ChatMessageTab;
 import view.ChatMessageWindow;
+import view.ChatPopupWindow;
 
 public class ChatMessageController {
 	
+	private ChatPopupController chatPopupController;
+	private ChatPopupWindow chatPopupWindow;
 	private ChatMessageWindow chatMessageWindow;
 	private ChatClient client;
 	private Map<String, ChatIOController> controllers;
@@ -44,15 +43,8 @@ public class ChatMessageController {
 			controller.handleMessage(message);
 		} else {
 			ChatUser user = client.getClients().get(id);
-			ChatIOController controller = new ChatIOController(user, client);
-			controllers.put(id, controller);
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					chatMessageWindow.getTabs().add(controller.getTab());
-				}
-			});
-			controller.handleMessage(message);
+			chatPopupWindow = new ChatPopupWindow();
+			chatPopupController = new ChatPopupController(chatPopupWindow, user, client, controllers, id, chatMessageWindow, message);
 		}
 	}
 }
