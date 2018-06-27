@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import helper.MessageHandler;
@@ -18,9 +20,11 @@ public class ChatServer extends ChatBase {
 	private int port;
 	private ServerSocket server;
 	private MessageHandler messageHandler;
+	private Map<String, String> users;
 
 	public ChatServer() {
 		super(SenderType.Server);
+		this.users = new HashMap<String, String>();
 		this.port = SERVER_PORT;
 		this.messageHandler = new MessageHandler(id, port, "localhost");
 	}
@@ -111,6 +115,11 @@ public class ChatServer extends ChatBase {
 								registerNewUser(chatMessage);
 							}
 
+						} else {
+							chatUser.disconnect();
+							clients.remove(chatUser.getID().toString());
+							printer.printMessage("Client disconnected: " + chatUser.getID() + " ... Bye Bye!");
+							updateClients(chatUser, MessageType.Disconnect);
 						}
 					} catch (IOException e1) {
 						chatUser.disconnect();
@@ -139,8 +148,22 @@ public class ChatServer extends ChatBase {
 	private void checkLogin(ChatMessage chatMessage) {
 		String id = chatMessage.getUUID().toString();
 		ChatUser user = getClients().get(id);
-		String username = user.getUsername();
-		String password = user.getPassword();
+		String username = chatMessage.getUsername();
+		String password = chatMessage.getPassword();
+		if(users.containsKey(username)) {
+			if(users.get(username).equals(password)) {
+				user.setUsername(username);
+				user.setPassword(password);
+				sendLoginResponse(user, "Success");
+				updateClients(user, MessageType.Connect);
+			} else {
+				sendLoginResponse(user, "Failed");
+			}
+		} else {
+			sendLoginResponse(user, "Failed");
+		}
+		
+		/*
 		if (username != null && password != null) {
 			if (username.equals(chatMessage.getUsername()) && password.equals(chatMessage.getPassword())) {
 				sendLoginResponse(user, "Success");
@@ -153,6 +176,7 @@ public class ChatServer extends ChatBase {
 		} else {
 			sendLoginResponse(user, "Failed");
 		}
+		*/
 
 	}
 	
@@ -175,6 +199,7 @@ public class ChatServer extends ChatBase {
 			}
 		}
 		if (!exists) {
+			users.put(username, password);
 			user.setUsername(username);
 			user.setPassword(password);
 			sendLoginResponse(user, "Success");
