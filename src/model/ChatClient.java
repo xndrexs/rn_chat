@@ -29,6 +29,7 @@ public class ChatClient extends ChatBase {
 	private int serverPort;
 	private int clientPort;
 	private StageManager manager;
+	private final static String MESSAGE_RECEIVED = "MessageReceivedSuccess";
 	
 	public ChatClient(String adress, int serverPort, StageManager manager) throws IOException {
 		super(SenderType.Client);
@@ -162,9 +163,17 @@ public class ChatClient extends ChatBase {
 					String message = new String(receivePacket.getData());
 					ChatMessage chatMessage = messageHandler.deserializeMessage(message);
 
-					printer.printMessage(
-							"Message received (" + remoteAddress + ":" + remotePort + ": " + chatMessage.getMessage());
-					controller.notifyMessage(chatMessage);
+					printer.printMessage("Message received (" + remoteAddress + ":" + remotePort + ": " + chatMessage.getMessage());
+					
+					// Bestätigung
+					if(chatMessage.getMessage().equals(MESSAGE_RECEIVED)) {
+						printer.printMessage(MESSAGE_RECEIVED);
+					} else {
+						ChatUser user = new ChatUser(id, chatMessage.getUsername(), chatMessage.getPort(), chatMessage.getAddress());
+						sendUDPMessage(user, MESSAGE_RECEIVED);
+						controller.notifyMessage(chatMessage);
+					}
+					
 					clientSocket.close();
 				}
 			}

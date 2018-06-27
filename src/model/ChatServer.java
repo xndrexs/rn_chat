@@ -162,22 +162,6 @@ public class ChatServer extends ChatBase {
 		} else {
 			sendLoginResponse(user, "Failed");
 		}
-		
-		/*
-		if (username != null && password != null) {
-			if (username.equals(chatMessage.getUsername()) && password.equals(chatMessage.getPassword())) {
-				sendLoginResponse(user, "Success");
-				user.setUsername(username);
-				user.setPassword(password);
-				updateClients(user, MessageType.Connect);
-			} else {
-				sendLoginResponse(user, "Failed");
-			}
-		} else {
-			sendLoginResponse(user, "Failed");
-		}
-		*/
-
 	}
 	
 	private void sendLoginResponse(ChatUser user, String result) {
