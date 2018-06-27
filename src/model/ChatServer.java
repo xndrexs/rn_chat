@@ -64,6 +64,9 @@ public class ChatServer extends ChatBase {
 
 						// Der Client schickt als erste Nachricht seine ID und Port
 						ChatMessage chatMessage = messageHandler.deserializeMessage(clientMessageReader.readLine());
+						if (chatMessage == null) {
+							break;
+						}
 						UUID clientId = chatMessage.getUUID();
 						int port = chatMessage.getPort();
 						String address = chatMessage.getAddress();
@@ -104,6 +107,9 @@ public class ChatServer extends ChatBase {
 					try {
 						String jsonMessage = chatUser.getMessageReader().readLine();
 						if (jsonMessage != null) {
+							if (jsonMessage.equals("ABMELDEN")) {
+								break;
+							}
 							ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
 							printer.printMessage("Message received (" + chatUser.getID() + ")" + ": " + chatMessage.getMessage());
 							// LOGIN
