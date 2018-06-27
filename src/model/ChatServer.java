@@ -107,7 +107,7 @@ public class ChatServer extends ChatBase {
 					try {
 						String jsonMessage = chatUser.getMessageReader().readLine();
 						if (jsonMessage != null) {
-							if (jsonMessage.equals("ABMELDEN")) {
+							if (jsonMessage.equals("Logout")) {
 								break;
 							}
 							ChatMessage chatMessage = messageHandler.deserializeMessage(jsonMessage);
