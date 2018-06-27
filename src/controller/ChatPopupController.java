@@ -2,8 +2,6 @@ package controller;
 
 import java.util.Map;
 
-import helper.MessageHandler;
-import helper.UDPSender;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -51,17 +49,5 @@ public class ChatPopupController {
 			}
 		};
 		popupWindow.getAcceptButton().addEventHandler(acceptEventType, acceptEventHandler);
-//		
-//		EventType<MouseEvent> declineEventType = MouseEvent.MOUSE_CLICKED;
-//		EventHandler<Event> declineEventHandler = new EventHandler<Event>() {
-//			@Override
-//			public void handle(Event arg0) {
-//				MessageHandler message = new MessageHandler(user.getID(), user.getPort(), user.getAddress());
-//				UDPSender sender = new UDPSender(user.getAddress(), user.getPort());
-//				sender.sendMessage(message.serializeMessage("The user declined your request."));
-//				popupWindow.closePopup();
-//			}
-//		};
-//		popupWindow.getDeclineButton().addEventHandler(declineEventType, declineEventHandler);
 	}
 }
